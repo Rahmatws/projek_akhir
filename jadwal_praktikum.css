@@ -163,4 +163,117 @@
 .data-table td .action-buttons .delete-button {
     background-color: #dc3545; /* Red */
     color: white;
+}
+
+/* Styles for Add Schedule Form */
+.add-schedule-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    /* display: none; will be controlled by JavaScript */
+}
+
+.add-schedule-form form {
+    display: block; /* Change from grid to block for single column */
+    /* grid-template-columns: 1fr 1fr; */ /* Removed two-column grid */
+    gap: 20px;
+}
+
+.add-schedule-form .form-group {
+    margin-bottom: 15px;
+    display: flex; /* Use flexbox for label and input on the same line */
+    align-items: center; /* Vertically align items */
+}
+
+.add-schedule-form label {
+    display: inline-block; /* Display label inline */
+    margin-bottom: 0; /* Remove bottom margin */
+    margin-right: 10px; /* Add space between label and input */
+    width: 150px; /* Give labels a fixed width for alignment */
+    font-weight: bold;
+    color: #555;
+}
+
+.add-schedule-form input[type="text"],
+.add-schedule-form select {
+    width: calc(100% - 160px); /* Adjust width to account for label width and margin */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-schedule-form .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 0; /* Remove top margin */
+    align-items: center; /* Vertically align radio buttons */
+}
+
+.add-schedule-form .radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+.add-schedule-form .time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1; /* Allow time inputs to take up remaining space */
+}
+
+.add-schedule-form .time-inputs input[type="text"] {
+    width: 60px; /* Keep specific width for time inputs */
+    text-align: center;
+}
+
+.add-schedule-form .time-inputs .separator {
+    font-weight: bold;
+    color: #555;
+}
+
+.add-schedule-form .submit-schedule-button {
+    background-color: #28a745; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    grid-column: auto; /* Remove grid column span */
+    margin-top: 20px; /* Adjust top margin */
+}
+
+.add-schedule-form .submit-schedule-button:hover {
+    background-color: #218838;
+}
+
+.alert-section {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.alert-section .icon {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.alert-section.conflict {
+    background-color: #f8d7da; /* Light red */
+    color: #721c24; /* Dark red */
+    border: 1px solid #f5c6cb;
+}
+
+.alert-section.recommendation {
+    background-color: #d4edda; /* Light green */
+    color: #155724; /* Dark green */
+    border: 1px solid #c3e6cb;
 } 
