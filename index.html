@@ -15,15 +15,17 @@
         <div class="login-box">
             <img src="unibba-logo.png" alt="Logo" class="logo">
             <h3>MASUKKAN AKUN</h3>
-            <div class="input-group">
-                <input type="text" placeholder="admin">
-                <span class="icon">👤</span>
-            </div>
-            <div class="input-group">
-                <input type="password" placeholder="*****">
-                <span class="icon">🔒</span>
-            </div>
-            <button class="login-button">LOG IN</button>
+            <form action="login_process.php" method="post">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="admin" required>
+                    <span class="icon">👤</span>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="*****" required>
+                    <span class="icon">🔒</span>
+                </div>
+                <button type="submit" class="login-button">LOG IN</button>
+            </form>
         </div>
     </div>
 </body>
