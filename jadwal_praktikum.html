@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Praktikum</title>
+    <link rel="stylesheet" href="jadwal_praktikum.css">
+    <link rel="stylesheet" href="dashboard.css"> <!-- Link to dashboard.css for sidebar styling -->
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <!-- Placeholder for logo/title -->
+                <img src="unibba-logo.png" alt="Logo" class="sidebar-logo">
+                <h3>DAFTAR MENU PRAKTIKUM</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="icon">🏠</i> Dashboard</a></li>
+                <li><a href="jadwal_praktikum.html"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
+                <li><a href="#"><i class="icon">🏫</i> Kelas</a></li>
+                <li><a href="#"><i class="icon">✍️</i> Praktikan</a></li>
+                <li><a href="#"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="#"><i class="icon">📚</i> Mata Praktikum</a></li>
+                <li><a href="#"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
+                <li><a href="#"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
+                <li><a href="#"><i class="icon">📄</i> Laboran</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="page-title-bar">
+                <h2>Jadwal Praktikum</h2>
+                <span class="page-description">Data Matkum, Jadwal Praktikum, Menampilkan Data Jadwal Praktikum</span>
+            </div>
+            <div class="schedule-header">
+                <h2>Daftar Jadwal Praktikum</h2>
+            </div>
+            <div class="schedule-actions">
+                <button class="add-schedule-button">+ Tambah Jadwal Praktikum</button>
+                <button class="edit-schedule-button"><i class="icon">🗓️</i> Data Ubah Jadwal</button>
+                <button class="print-button"><i class="icon">🖨️</i> Cetak</button>
+            </div>
+            <div class="data-table">
+                <label for="entries">Show</label>
+                <select name="entries" id="entries">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select> entries
+                <div class="search-box">
+                    <label for="search">Search:</label>
+                    <input type="text" id="search">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tahun</th>
+                            <th>Matkum</th>
+                            <th>Asisten Praktikum</th>
+                            <th>Ruangan</th>
+                            <th>Kelas</th>
+                            <th>Hari</th>
+                            <th>Waktu</th>
+                            <th>Pilihan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

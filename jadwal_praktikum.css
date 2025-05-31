@@ -1,0 +1,166 @@
+/* Inherit basic dashboard layout from dashboard.css */
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #fff; /* White background for main content */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-left: 20px; /* Add some space between sidebar and content */
+}
+
+.schedule-header {
+    background-color: #28a745; /* Green color */
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0; /* Rounded top corners */
+    margin: -20px -20px 20px -20px; /* Extend header to the edges of the main-content padding */
+}
+
+.schedule-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.page-title-bar {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6; /* Add a separator line */
+}
+
+.page-title-bar h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #343a40; /* Dark text color */
+    display: inline-block; /* Allow description to be on the same line */
+    margin-right: 10px;
+}
+
+.page-description {
+    font-size: 0.9em;
+    color: #6c757d; /* Muted text color */
+}
+
+.schedule-actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.schedule-actions button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.schedule-actions button .icon {
+    margin-right: 5px;
+}
+
+.add-schedule-button {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+.add-schedule-button:hover {
+    background-color: #218838;
+}
+
+.edit-schedule-button {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+.edit-schedule-button:hover {
+    background-color: #0056b3;
+}
+
+.print-button {
+    background-color: #6f42c1; /* Purple */
+    color: white;
+}
+
+.print-button:hover {
+    background-color: #59359e;
+}
+
+.data-table {
+    margin-top: 20px;
+}
+
+.data-table label,
+.data-table select,
+.data-table input[type="text"] {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.data-table .search-box {
+    float: right;
+}
+
+.data-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    text-align: left; /* Align text to the left */
+}
+
+.data-table th {
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
+    font-weight: bold;
+    text-align: center; /* Center header text */
+}
+
+.data-table td {
+    background-color: #fff;
+}
+
+/* Specific column widths if needed, based on image */
+.data-table th:nth-child(1) { width: 5%; } /* No */
+.data-table th:nth-child(2) { width: 10%; } /* Tahun */
+.data-table th:nth-child(3) { width: 20%; } /* Matkum */
+.data-table th:nth-child(4) { width: 15%; } /* Asisten Praktikum */
+.data-table th:nth-child(5) { width: 10%; } /* Ruangan */
+.data-table th:nth-child(6) { width: 10%; } /* Kelas */
+.data-table th:nth-child(7) { width: 10%; } /* Hari */
+.data-table th:nth-child(8) { width: 10%; } /* Waktu */
+.data-table th:nth-child(9) { width: 10%; } /* Pilihan */
+
+.data-table td:nth-child(9) {
+    text-align: center; /* Center content in Pilihan column */
+}
+
+.data-table td .action-buttons button {
+    padding: 5px 10px;
+    margin: 0 2px;
+    font-size: 0.8em;
+}
+
+.data-table td .action-buttons .view-button {
+    background-color: #ffc107; /* Yellow */
+    color: #212529;
+}
+
+.data-table td .action-buttons .edit-button {
+    background-color: #17a2b8; /* Info Blue/Cyan */
+    color: white;
+}
+
+.data-table td .action-buttons .delete-button {
+    background-color: #dc3545; /* Red */
+    color: white;
+} 
