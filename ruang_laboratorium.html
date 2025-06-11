@@ -38,12 +38,12 @@
                 </div>
             </div>
 
-            <div class="lab-list-container">
+            <div class="lab-list-container" id="lab-list-container">
                 <div class="lab-list-header">
                     <h2><span class="header-icon">🔬</span>Daftar Ruang Lab Praktikum</h2>
                 </div>
                 <div class="lab-actions">
-                    <button class="add-lab-button">+ Tambah Ruang Laboratorium</button>
+                    <button class="add-lab-button" id="show-add-form-button">+ Tambah Ruang Laboratorium</button>
                 </div>
 
                 <div class="data-table">
@@ -99,7 +99,61 @@
                     <p class="table-info-text">Menampilkan daftar Ruang Lab, untuk mengedit dan menghapus data klik tombol pada kolom pilihan.</p>
                 </div>
             </div>
+
+            <div class="add-lab-form-container" id="add-lab-form-container" style="display: none;">
+                <div class="add-lab-form-header">
+                    <h2><span class="header-icon">➕</span> Tambah Ruang Laboratorium</h2>
+                </div>
+                <div class="add-lab-form-content">
+                    <form>
+                        <div class="form-group">
+                            <label for="namaRuang">Ruang Lab</label>
+                            <input type="text" id="namaRuang" name="namaRuang" placeholder="Nama Ruang">
+                        </div>
+                        <div class="form-group">
+                            <label for="lokasi">Lokasi</label>
+                            <input type="text" id="lokasi" name="lokasi" placeholder="Lokasi">
+                        </div>
+                        <div class="button-group">
+                            <button type="reset" class="reset-button">♻️ Reset</button>
+                            <button type="submit" class="save-button">💾 Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <p class="form-info-text">Menambah Data Ruang Laboratorium, isi form diatas untuk menambahkan data ruang laboratorium.</p>
+                <div class="form-back-button-container">
+                    <button class="back-button" id="back-to-list-button">← Back</button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAddFormBtn = document.getElementById('show-add-form-button');
+            const backToListBtn = document.getElementById('back-to-list-button');
+            const labListContainer = document.getElementById('lab-list-container');
+            const addLabFormContainer = document.getElementById('add-lab-form-container');
+            const mainContent = document.querySelector('.main-content');
+            const headerTitle = document.querySelector('.top-bar h2');
+            const breadcrumb = document.querySelector('.top-bar .breadcrumb');
+
+            showAddFormBtn.addEventListener('click', function() {
+                labListContainer.style.display = 'none';
+                addLabFormContainer.style.display = 'block';
+                // Update top bar title and breadcrumb
+                headerTitle.textContent = 'Tambah Ruang Laboratorium';
+                breadcrumb.textContent = 'Data Master Ruang Lab, Menambahkan Data Ruang Laboratorium';
+            });
+
+            backToListBtn.addEventListener('click', function() {
+                addLabFormContainer.style.display = 'none';
+                labListContainer.style.display = 'block';
+                // Reset top bar title and breadcrumb
+                headerTitle.textContent = 'Daftar Ruang Laboratorium';
+                breadcrumb.textContent = 'Data Master Ruang Lab, Menampilkan Data Ruang Laboratorium';
+            });
+        });
+    </script>
 </body>
 </html> 

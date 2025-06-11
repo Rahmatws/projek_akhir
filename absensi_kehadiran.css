@@ -91,15 +91,18 @@ body {
     border: 2px solid #fff;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
-.absensi-box {
+
+/* Main Content Styles */
+.attendance-container {
     background: #fff;
     border-radius: 12px;
     margin: 24px 40px 0 40px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     padding-bottom: 24px;
 }
-.absensi-header {
-    background: #8e24aa;
+
+.attendance-header {
+    background: #8e24aa; /* Purple */
     color: #fff;
     font-weight: bold;
     font-size: 1.15em;
@@ -110,53 +113,81 @@ body {
     gap: 10px;
     letter-spacing: 0.5px;
 }
-.absensi-header .icon {
+
+.attendance-header .header-icon {
     font-size: 1.2em;
 }
-.absensi-info-table {
-    padding: 18px 24px 0 24px;
+
+.attendance-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three columns for details */
+    gap: 10px 20px; /* Row gap, column gap */
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
 }
-.absensi-info-table table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1em;
-    color: #232e3c;
+
+.attendance-details .detail-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between label and value */
 }
-.absensi-info-table td {
-    padding: 6px 12px 6px 0;
-    border: none;
-    vertical-align: top;
-}
-.absensi-info-table tr td:first-child {
+
+.attendance-details .detail-label {
     font-weight: bold;
     color: #555;
-    width: 120px;
+    font-size: 0.95em;
 }
-.absensi-table {
+
+.attendance-details .detail-value {
+    color: #333;
+    font-size: 0.95em;
+}
+
+.data-table {
     padding: 18px 24px 0 24px;
 }
-.absensi-table table {
+
+.data-table table {
     width: 100%;
     border-collapse: collapse;
     background: #fff;
+    margin-top: 10px;
     font-size: 1em;
 }
-.absensi-table th {
-    background: #e8f5e9;
+
+.data-table th {
+    background: #e0f2f7;
     color: #232e3c;
     font-weight: bold;
     padding: 10px 8px;
-    border-bottom: 2px solid #c8e6c9;
+    border-bottom: 2px solid #b3e5fc;
     text-align: left;
 }
-.absensi-table td {
+
+.data-table th:first-child {
+    text-align: center;
+}
+
+.data-table td {
     padding: 10px 8px;
     border-bottom: 1px solid #f0f0f0;
 }
-.absensi-table select {
-    padding: 6px 12px;
-    border-radius: 5px;
-    border: 1px solid #bbb;
-    font-size: 1em;
-    background: #f8f8fa;
+
+.data-table td:first-child {
+    text-align: center;
+}
+
+.data-table select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.data-table select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 } 
