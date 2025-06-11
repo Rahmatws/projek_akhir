@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f7fa;
+}
+.dashboard-container {
+    display: flex;
+}
+.sidebar {
+    width: 240px;
+    background: #232e3c;
+    color: #fff;
+    min-height: 100vh;
+    padding: 0 0 30px 0;
+}
+.sidebar-header {
+    text-align: center;
+    padding: 24px 0 12px 0;
+}
+.sidebar-logo {
+    width: 60px;
+    margin-bottom: 10px;
+}
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #fff;
+    letter-spacing: 1px;
+}
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-menu li {
+    margin: 0 0 6px 0;
+}
+.sidebar-menu a {
+    color: #cfd8dc;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 6px 0 0 6px;
+    font-size: 1em;
+    transition: background 0.2s;
+}
+.sidebar-menu a:hover, .sidebar-menu a.active {
+    background: #1a2230;
+    color: #fff;
+}
+.sidebar-menu .icon {
+    margin-right: 10px;
+}
+.main-content {
+    flex: 1;
+    padding: 0 0 30px 0;
+    background: #f4f7fa;
+}
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 32px 40px 0 40px;
+}
+.title-breadcrumb h2 {
+    margin: 0 0 2px 0;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #232e3c;
+}
+.breadcrumb {
+    font-size: 0.95em;
+    color: #888;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.user-name {
+    font-size: 1em;
+    color: #232e3c;
+}
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.absensi-box {
+    background: #fff;
+    border-radius: 12px;
+    margin: 24px 40px 0 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding-bottom: 24px;
+}
+.absensi-header {
+    background: #8e24aa;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.15em;
+    padding: 14px 24px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+}
+.absensi-header .icon {
+    font-size: 1.2em;
+}
+.absensi-info-table {
+    padding: 18px 24px 0 24px;
+}
+.absensi-info-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    color: #232e3c;
+}
+.absensi-info-table td {
+    padding: 6px 12px 6px 0;
+    border: none;
+    vertical-align: top;
+}
+.absensi-info-table tr td:first-child {
+    font-weight: bold;
+    color: #555;
+    width: 120px;
+}
+.absensi-table {
+    padding: 18px 24px 0 24px;
+}
+.absensi-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 1em;
+}
+.absensi-table th {
+    background: #e8f5e9;
+    color: #232e3c;
+    font-weight: bold;
+    padding: 10px 8px;
+    border-bottom: 2px solid #c8e6c9;
+    text-align: left;
+}
+.absensi-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.absensi-table select {
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    font-size: 1em;
+    background: #f8f8fa;
+} 
