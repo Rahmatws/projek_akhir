@@ -15,8 +15,8 @@
     padding: 14px 24px;
     font-weight: bold;
     border-radius: 10px 10px 0 0;
-    margin: 32px auto 18px auto;
-    max-width: 900px;
+    margin: 32px auto 18px auto; /* Default margin for green bar */
+    /* max-width: 900px; */ /* Removed this to allow full width for default */
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     letter-spacing: 0.5px;
     font-size: 1.2em;
@@ -179,85 +179,99 @@
 /* Styles for Add Schedule Form */
 .add-schedule-form {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    margin-top: 0;
-    /* display: none; will be controlled by JavaScript */
+    padding: 24px 18px 18px 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    margin: 0 auto 18px auto; /* Centered, with bottom margin, but no top margin for direct align with header */
+    max-width: 900px;
+    border: none;
+    margin-top: 0; /* No top margin here, margin handled by header */
 }
 
 .add-schedule-form form {
-    display: block; /* Change from grid to block for single column */
-    /* grid-template-columns: 1fr 1fr; */ /* Removed two-column grid */
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
 }
 
 .add-schedule-form .form-group {
-    margin-bottom: 15px;
-    display: flex; /* Use flexbox for label and input on the same line */
-    align-items: center; /* Vertically align items */
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
 }
 
 .add-schedule-form label {
-    display: inline-block; /* Display label inline */
-    margin-bottom: 0; /* Remove bottom margin */
-    margin-right: 10px; /* Add space between label and input */
-    width: 150px; /* Give labels a fixed width for alignment */
+    width: 160px;
+    min-width: 160px;
+    margin-right: 16px;
     font-weight: bold;
-    color: #555;
+    color: #444;
+    font-size: 1em;
+    text-align: left;
 }
 
 .add-schedule-form input[type="text"],
 .add-schedule-form select {
-    width: calc(100% - 160px); /* Adjust width to account for label width and margin */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    flex: 1;
+    min-width: 180px;
+    padding: 8px 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
     box-sizing: border-box;
+    font-size: 1em;
+    background: #fafbfc;
+    color: #222;
 }
 
 .add-schedule-form .radio-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 0; /* Remove top margin */
-    align-items: center; /* Vertically align radio buttons */
+    gap: 24px;
+    align-items: center;
 }
 
-.add-schedule-form .radio-group input[type="radio"] {
-    margin-right: 5px;
+.add-schedule-form .radio-group label {
+    width: auto;
+    font-weight: 500;
+    color: #444;
+    margin-right: 10px;
+    margin-left: 2px;
+    font-size: 1em;
 }
 
 .add-schedule-form .time-inputs {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-grow: 1; /* Allow time inputs to take up remaining space */
 }
 
 .add-schedule-form .time-inputs input[type="text"] {
-    width: 60px; /* Keep specific width for time inputs */
-    text-align: center;
-}
-
-.add-schedule-form .time-inputs .separator {
-    font-weight: bold;
-    color: #555;
+    width: 80px;
+    padding: 8px 8px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1.5px solid #e0e0e0;
+    background: #fafbfc;
 }
 
 .add-schedule-form .submit-schedule-button {
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     color: white;
-    padding: 10px 20px;
+    padding: 8px 24px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     transition: background-color 0.3s ease;
-    grid-column: auto; /* Remove grid column span */
-    margin-top: 20px; /* Adjust top margin */
+    margin-top: 24px;
+    margin-left: 160px;
 }
 
 .add-schedule-form .submit-schedule-button:hover {
@@ -295,10 +309,10 @@
     padding: 24px 18px 18px 18px;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    margin: 24px auto 18px auto;
+    margin: 0 auto 18px auto; /* Centered, with bottom margin, but no top margin for direct align with header */
     max-width: 900px;
     border: none;
-    margin-top: 0;
+    margin-top: 0; /* No top margin here, margin handled by header */
 }
 
 .edit-schedule-form form {
@@ -436,28 +450,15 @@
     display: none !important;
 }
 
-.add-header-bar {
-    background: #8e24aa;
-    color: #fff;
-    padding: 14px 24px;
-    border-radius: 10px 10px 0 0;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin: 0 auto -10px auto;
-    max-width: 900px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    letter-spacing: 0.5px;
-}
-
 /* Ensure only one bar, and bar width matches form width */
 .adding .schedule-header,
 .editing .schedule-header {
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 900px; /* Limit width when in add/edit mode */
+    margin: 32px auto 0 auto; /* Ensure it's centered and sits on top of the form */
+    border-radius: 10px 10px 0 0; /* Keep top corners rounded */
 }
 
 /* Add margin below bar for spacing in normal mode */
-.schedule-header:not(.edit-mode) {
-    margin-bottom: 32px;
+.schedule-header:not(.edit-mode):not(.adding) {
+    margin-bottom: 32px; /* Extra space below green bar in normal mode */
 } 
