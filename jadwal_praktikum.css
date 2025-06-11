@@ -10,17 +10,28 @@
 }
 
 .schedule-header {
-    background-color: #28a745; /* Green color */
+    background-color: #28a745;
     color: white;
-    padding: 10px 15px;
+    padding: 14px 24px;
     font-weight: bold;
-    border-radius: 8px 8px 0 0; /* Rounded top corners */
-    margin: -20px -20px 20px -20px; /* Extend header to the edges of the main-content padding */
+    border-radius: 10px 10px 0 0;
+    margin: 32px auto 18px auto;
+    max-width: 900px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
+    font-size: 1.2em;
+    transition: background 0.3s, color 0.3s;
+}
+
+.schedule-header.edit-mode {
+    background: #8e24aa !important;
+    color: #fff !important;
 }
 
 .schedule-header h2 {
     margin: 0;
     font-size: 1.2em;
+    font-weight: bold;
 }
 
 .page-title-bar {
@@ -172,6 +183,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    margin-top: 0;
     /* display: none; will be controlled by JavaScript */
 }
 
@@ -276,4 +288,176 @@
     background-color: #d4edda; /* Light green */
     color: #155724; /* Dark green */
     border: 1px solid #c3e6cb;
+}
+
+.edit-schedule-form {
+    background: #fff;
+    padding: 24px 18px 18px 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    margin: 24px auto 18px auto;
+    max-width: 900px;
+    border: none;
+    margin-top: 0;
+}
+
+.edit-schedule-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+}
+
+.edit-schedule-form .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.edit-schedule-form label {
+    width: 160px;
+    min-width: 160px;
+    margin-right: 16px;
+    font-weight: bold;
+    color: #444;
+    font-size: 1em;
+    text-align: left;
+}
+
+.edit-schedule-form input[type="text"],
+.edit-schedule-form select {
+    flex: 1;
+    min-width: 180px;
+    padding: 8px 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    background: #fafbfc;
+    color: #222;
+}
+
+.edit-schedule-form .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+}
+
+.edit-schedule-form .radio-group label {
+    width: auto;
+    font-weight: 500;
+    color: #444;
+    margin-right: 10px;
+    margin-left: 2px;
+    font-size: 1em;
+}
+
+.edit-schedule-form .time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-schedule-form .time-inputs input[type="text"] {
+    width: 80px;
+    padding: 8px 8px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1.5px solid #e0e0e0;
+    background: #fafbfc;
+}
+
+.edit-schedule-form .button-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 14px;
+    margin-top: 24px;
+    margin-left: 160px;
+}
+
+.edit-schedule-form .reset-schedule-button {
+    background-color: #4fc3f7;
+    color: white;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-schedule-form .reset-schedule-button:hover {
+    background-color: #039be5;
+}
+
+.edit-schedule-form .submit-schedule-button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-schedule-form .submit-schedule-button:hover {
+    background-color: #218838;
+}
+
+/* Edit header bar */
+.edit-header-bar {
+    background: #8e24aa;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 10px 10px 0 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 auto -10px auto;
+    max-width: 900px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
+}
+
+/* Hide schedule-actions when editing or adding */
+.editing #schedule-actions,
+.adding #schedule-actions {
+    display: none !important;
+}
+
+.add-header-bar {
+    background: #8e24aa;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 10px 10px 0 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 auto -10px auto;
+    max-width: 900px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
+}
+
+/* Ensure only one bar, and bar width matches form width */
+.adding .schedule-header,
+.editing .schedule-header {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Add margin below bar for spacing in normal mode */
+.schedule-header:not(.edit-mode) {
+    margin-bottom: 32px;
 } 
