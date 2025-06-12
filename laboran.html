@@ -133,7 +133,88 @@
                 </div>
             </div>
 
+            <div class="add-laboran-form-container" id="add-laboran-form-container" style="display: none;">
+                <div class="add-laboran-form-header">
+                    <h2><span class="header-icon">➕</span> Tambah Laboran</h2>
+                </div>
+                <div class="add-laboran-form-content">
+                    <form>
+                        <div class="form-group">
+                            <label for="idLaboran">ID Laboran</label>
+                            <input type="text" id="idLaboran" name="idLaboran" placeholder="ID Petugas (sebagai Username login)">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Password (sebagai password login)">
+                        </div>
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" id="nama" name="nama" placeholder="Nama">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio-group">
+                                <input type="radio" id="lakiLaki" name="gender" value="Laki-Laki">
+                                <label for="lakiLaki">Laki - Laki</label>
+                                <input type="radio" id="perempuan" name="gender" value="Perempuan">
+                                <label for="perempuan">Perempuan</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <textarea id="alamat" name="alamat" placeholder="Alamat"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Status Laboran</label>
+                            <div class="radio-group">
+                                <input type="radio" id="statusAdmin" name="statusLaboran" value="Admin">
+                                <label for="statusAdmin">Admin</label>
+                                <input type="radio" id="statusLaboran" name="statusLaboran" value="Laboran">
+                                <label for="statusLaboran">Laboran</label>
+                                <input type="radio" id="statusKepalaLab" name="statusLaboran" value="Kepala Lab">
+                                <label for="statusKepalaLab">Kepala Lab</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="noHp">NO HP</label>
+                            <input type="text" id="noHp" name="noHp" placeholder="No Hp">
+                        </div>
+                        <div class="button-group">
+                            <button type="reset" class="reset-button">♻️ Reset</button>
+                            <button type="submit" class="save-button">💾 Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-back-button-container">
+                    <button class="back-button" id="back-to-list-button">← Back</button>
+                </div>
+            </div>
+
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAddFormBtn = document.getElementById('show-add-form-button');
+            const backToListBtn = document.getElementById('back-to-list-button');
+            const laboranListContainer = document.getElementById('laboran-list-container');
+            const addLaboranFormContainer = document.getElementById('add-laboran-form-container');
+            const headerTitle = document.querySelector('.top-bar h2');
+            const breadcrumb = document.querySelector('.top-bar .breadcrumb');
+
+            showAddFormBtn.addEventListener('click', function() {
+                laboranListContainer.style.display = 'none';
+                addLaboranFormContainer.style.display = 'block';
+                headerTitle.textContent = 'Tambah Laboran';
+                breadcrumb.textContent = 'Data Master Laboran, Menambahkan Data Laboran Laboratorium FTI';
+            });
+
+            backToListBtn.addEventListener('click', function() {
+                addLaboranFormContainer.style.display = 'none';
+                laboranListContainer.style.display = 'block';
+                headerTitle.textContent = 'Daftar Laboran';
+                breadcrumb.textContent = 'Data Master Laboran, Menampilkan data Laboran Laboratorium FTI';
+            });
+        });
+    </script>
 </body>
 </html> 

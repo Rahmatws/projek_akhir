@@ -163,4 +163,146 @@
     margin-top: 20px;
     font-size: 0.9em;
     color: #666;
+}
+
+/* Add Laboran Form Styles */
+.add-laboran-form-container {
+    background: #fff;
+    border-radius: 12px;
+    margin: 24px auto 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    max-width: 750px; /* Adjusted to match image */
+    padding-bottom: 24px;
+    position: relative;
+}
+
+.add-laboran-form-header {
+    background: #6f42c1; /* Purple as per image */
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.15em;
+    padding: 14px 24px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+}
+
+.add-laboran-form-header .header-icon {
+    font-size: 1.2em;
+}
+
+.add-laboran-form-content {
+    padding: 20px 24px;
+}
+
+.add-laboran-form-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.add-laboran-form-content .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* To align label and input on the same line */
+}
+
+.add-laboran-form-content label {
+    flex-basis: 30%; /* Adjust label width */
+    font-weight: bold;
+    color: #333;
+}
+
+.add-laboran-form-content input[type="text"],
+.add-laboran-form-content input[type="password"],
+.add-laboran-form-content textarea {
+    flex-basis: 65%; /* Adjust input width */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.95em;
+}
+
+.add-laboran-form-content .radio-group {
+    flex-basis: 65%; /* Align with input fields */
+    display: flex;
+    gap: 20px; /* Space between radio buttons */
+    align-items: center;
+}
+
+.add-laboran-form-content .radio-group label {
+    font-weight: normal; /* Override bold for radio labels */
+    flex-basis: unset; /* Remove flex-basis for these labels */
+}
+
+.add-laboran-form-content .button-group {
+    display: flex;
+    justify-content: center; /* Center buttons */
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.add-laboran-form-content .reset-button {
+    background-color: #17a2b8; /* Info blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-laboran-form-content .reset-button:hover {
+    background-color: #138496;
+}
+
+.add-laboran-form-content .save-button {
+    background-color: #28a745; /* Success green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-laboran-form-content .save-button:hover {
+    background-color: #218838;
+}
+
+.form-back-button-container {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+}
+
+.back-button {
+    background-color: #dc3545; /* Red */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #c82333;
 } 
