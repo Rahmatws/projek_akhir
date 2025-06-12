@@ -252,23 +252,25 @@ body {
 }
 
 .table-info-text {
-    font-size: 0.85em;
-    color: #777;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
 }
 
-/* Styles for Add Lab Form */
-.add-lab-form-container {
+/* Add Lab Form Styles */
+.add-lab-form-container, .edit-lab-form-container {
     background: #fff;
     border-radius: 12px;
-    margin: 24px 40px 0 40px;
+    margin: 24px auto 0 auto;
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    max-width: 750px; /* Adjust as needed */
     padding-bottom: 24px;
+    position: relative;
 }
 
-.add-lab-form-header {
-    background: #8e24aa; /* Purple */
+.add-lab-form-header, .edit-lab-form-header {
+    background: #28a745; /* Green */
     color: #fff;
     font-weight: bold;
     font-size: 1.15em;
@@ -280,64 +282,59 @@ body {
     letter-spacing: 0.5px;
 }
 
-.add-lab-form-header .header-icon {
+.edit-lab-form-header {
+    background: #6f42c1; /* Purple */
+}
+
+.add-lab-form-header .header-icon, .edit-lab-form-header .header-icon {
     font-size: 1.2em;
 }
 
-.add-lab-form-content {
-    padding: 20px 24px 0 24px;
+.add-lab-form-content, .edit-lab-form-content {
+    padding: 20px 24px;
 }
 
-.add-lab-form-content form {
+.add-lab-form-content form, .edit-lab-form-content form {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    padding: 0;
+    gap: 15px;
 }
 
-.add-lab-form-content .form-group {
+.add-lab-form-content .form-group, .edit-lab-form-content .form-group {
     display: flex;
     align-items: center;
-    margin-bottom: 18px;
+    justify-content: space-between; /* To align label and input on the same line */
 }
 
-.add-lab-form-content label {
-    width: 120px; /* Adjust label width as per image */
-    min-width: 120px;
-    margin-right: 16px;
+.add-lab-form-content label, .edit-lab-form-content label {
+    flex-basis: 30%; /* Adjust label width */
     font-weight: bold;
-    color: #444;
-    font-size: 1em;
-    text-align: left;
+    color: #333;
 }
 
-.add-lab-form-content input[type="text"] {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1.5px solid #e0e0e0;
+.add-lab-form-content input[type="text"], .edit-lab-form-content input[type="text"] {
+    flex-basis: 65%; /* Adjust input width */
+    padding: 10px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 1em;
-    background: #fafbfc;
-    color: #222;
+    font-size: 0.95em;
 }
 
-.add-lab-form-content .button-group {
+.add-lab-form-content .button-group, .edit-lab-form-content .button-group {
     display: flex;
-    justify-content: flex-start;
-    gap: 14px;
-    margin-top: 10px;
-    margin-left: 136px; /* Align buttons with inputs */
+    justify-content: center; /* Align buttons to the center */
+    gap: 10px;
+    margin-top: 20px;
 }
 
-.add-lab-form-content .reset-button {
-    background-color: #007bff; /* Blue */
+.add-lab-form-content .reset-button, .edit-lab-form-content .reset-button {
+    background-color: #17a2b8; /* Info blue */
     color: white;
-    padding: 8px 24px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -345,18 +342,18 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.add-lab-form-content .reset-button:hover {
-    background-color: #0056b3;
+.add-lab-form-content .reset-button:hover, .edit-lab-form-content .reset-button:hover {
+    background-color: #138496;
 }
 
-.add-lab-form-content .save-button {
-    background-color: #28a745; /* Green */
+.add-lab-form-content .save-button, .edit-lab-form-content .update-button {
+    background-color: #28a745; /* Success green */
     color: white;
-    padding: 8px 24px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -364,32 +361,32 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.add-lab-form-content .save-button:hover {
+.add-lab-form-content .save-button:hover, .edit-lab-form-content .update-button:hover {
     background-color: #218838;
 }
 
 .form-info-text {
-    font-size: 0.85em;
-    color: #777;
-    text-align: left;
-    margin-top: 15px;
-    padding: 0 24px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 60px; /* Add margin-bottom to create space for the back button */
+    font-size: 0.9em;
+    color: #666;
 }
 
 .form-back-button-container {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 24px;
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
 }
 
 .back-button {
     background-color: #dc3545; /* Red */
     color: white;
-    padding: 8px 24px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: bold;
     display: flex;
     align-items: center;

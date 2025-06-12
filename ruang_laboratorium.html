@@ -125,6 +125,32 @@
                     <button class="back-button" id="back-to-list-button">← Back</button>
                 </div>
             </div>
+
+            <div class="edit-lab-form-container" id="edit-lab-form-container" style="display: none;">
+                <div class="edit-lab-form-header">
+                    <h2><span class="header-icon">📝</span> Edit Ruang Laboratorium</h2>
+                </div>
+                <div class="edit-lab-form-content">
+                    <form>
+                        <div class="form-group">
+                            <label for="editNamaRuang">Nama Ruang</label>
+                            <input type="text" id="editNamaRuang" name="editNamaRuang" placeholder="Nama Ruang">
+                        </div>
+                        <div class="form-group">
+                            <label for="editLokasi">Lokasi</label>
+                            <input type="text" id="editLokasi" name="editLokasi" placeholder="Lokasi">
+                        </div>
+                        <div class="button-group">
+                            <button type="reset" class="reset-button">♻️ Reset</button>
+                            <button type="submit" class="update-button">✅ Update</button>
+                        </div>
+                    </form>
+                </div>
+                <p class="form-info-text">Update Data Ruang Lab, edit form diatas untuk mengubah data Ruang Lab.</p>
+                <div class="form-back-button-container">
+                    <button class="back-button" id="back-from-edit-button">← Back</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -150,6 +176,37 @@
                 addLabFormContainer.style.display = 'none';
                 labListContainer.style.display = 'block';
                 // Reset top bar title and breadcrumb
+                headerTitle.textContent = 'Daftar Ruang Laboratorium';
+                breadcrumb.textContent = 'Data Master Ruang Lab, Menampilkan Data Ruang Laboratorium';
+            });
+
+            const editButtons = document.querySelectorAll('.edit-button');
+            const editLabFormContainer = document.getElementById('edit-lab-form-container');
+            const backFromEditBtn = document.getElementById('back-from-edit-button');
+            const editNamaRuangInput = document.getElementById('editNamaRuang');
+            const editLokasiInput = document.getElementById('editLokasi');
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    labListContainer.style.display = 'none';
+                    addLabFormContainer.style.display = 'none'; // Hide add form if open
+                    editLabFormContainer.style.display = 'block';
+
+                    // For demonstration, populate with dummy data. In a real app, you'd fetch actual data.
+                    const row = this.closest('tr');
+                    const namaRuang = row.cells[1].textContent;
+                    const lokasi = row.cells[2].textContent;
+                    editNamaRuangInput.value = namaRuang;
+                    editLokasiInput.value = lokasi;
+
+                    headerTitle.textContent = 'Edit Ruang Laboratorium';
+                    breadcrumb.textContent = 'Data Master Ruang Lab, Mengubah Data Ruang Laboratorium';
+                });
+            });
+
+            backFromEditBtn.addEventListener('click', function() {
+                editLabFormContainer.style.display = 'none';
+                labListContainer.style.display = 'block';
                 headerTitle.textContent = 'Daftar Ruang Laboratorium';
                 breadcrumb.textContent = 'Data Master Ruang Lab, Menampilkan Data Ruang Laboratorium';
             });
