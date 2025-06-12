@@ -190,6 +190,70 @@
                 </div>
             </div>
 
+            <div class="edit-laboran-form-container" id="edit-laboran-form-container" style="display: none;">
+                <div class="edit-laboran-form-header">
+                    <h2><span class="header-icon">📝</span> Edit Laboran</h2>
+                </div>
+                <div class="edit-laboran-form-content">
+                    <form>
+                        <div class="form-group">
+                            <label for="editIdLaboran">ID Laboran</label>
+                            <input type="text" id="editIdLaboran" name="editIdLaboran" placeholder="ID Petugas (sebagai Username login)" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editPassword">Password</label>
+                            <input type="password" id="editPassword" name="editPassword" placeholder="Password (sebagai password login)">
+                        </div>
+                        <div class="form-group">
+                            <label for="editNama">Nama</label>
+                            <input type="text" id="editNama" name="editNama" placeholder="Nama">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAlamat">Alamat</label>
+                            <textarea id="editAlamat" name="editAlamat" placeholder="Alamat"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio-group">
+                                <input type="radio" id="editLakiLaki" name="editGender" value="Laki-Laki">
+                                <label for="editLakiLaki">Laki - Laki</label>
+                                <input type="radio" id="editPerempuan" name="editGender" value="Perempuan">
+                                <label for="editPerempuan">Perempuan</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Status Laboran</label>
+                            <div class="radio-group">
+                                <input type="radio" id="editStatusAdmin" name="editStatusLaboran" value="Admin">
+                                <label for="editStatusAdmin">Admin</label>
+                                <input type="radio" id="editStatusLaboran" name="editStatusLaboran" value="Laboran">
+                                <label for="editStatusLaboran">Laboran</label>
+                                <input type="radio" id="editStatusKepalaLab" name="editStatusLaboran" value="Kepala Lab">
+                                <label for="editStatusKepalaLab">Kepala Lab</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editNoHp">NO HP</label>
+                            <input type="text" id="editNoHp" name="editNoHp" placeholder="No Hp">
+                        </div>
+                        <div class="form-group">
+                            <label>Foto</label>
+                            <div class="photo-upload-group">
+                                <img src="user.png" alt="Foto Laboran" class="laboran-photo" id="editLaboranPhoto">
+                                <input type="file" id="editFoto" name="editFoto" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="reset" class="reset-button">♻️ Reset</button>
+                            <button type="submit" class="update-button">✅ Update</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-back-button-container">
+                    <button class="back-button" id="back-from-edit-button">← Back</button>
+                </div>
+            </div>
+
         </div>
     </div>
     <script>
@@ -210,6 +274,57 @@
 
             backToListBtn.addEventListener('click', function() {
                 addLaboranFormContainer.style.display = 'none';
+                laboranListContainer.style.display = 'block';
+                headerTitle.textContent = 'Daftar Laboran';
+                breadcrumb.textContent = 'Data Master Laboran, Menampilkan data Laboran Laboratorium FTI';
+            });
+
+            const editButtons = document.querySelectorAll('.action-button.edit-button');
+            const editLaboranFormContainer = document.getElementById('edit-laboran-form-container');
+            const backFromEditBtn = document.getElementById('back-from-edit-button');
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    laboranListContainer.style.display = 'none';
+                    addLaboranFormContainer.style.display = 'none'; // Hide add form if open
+                    editLaboranFormContainer.style.display = 'block';
+
+                    // Populate form with dummy data from the clicked row
+                    const row = this.closest('tr');
+                    document.getElementById('editIdLaboran').value = row.cells[1].textContent; // ID Laboran
+                    // Password is not displayed for security, but in a real app, it wouldn't be directly populated here.
+                    document.getElementById('editNama').value = row.cells[3].textContent; // Nama
+                    document.getElementById('editAlamat').value = row.cells[4].textContent; // Alamat
+                    document.getElementById('editNoHp').value = row.cells[5].textContent; // No Hp
+
+                    // Set Gender radio button
+                    const gender = row.cells[2].textContent.toLowerCase(); // Assuming Status column has gender info
+                    if (gender.includes('laki')) {
+                        document.getElementById('editLakiLaki').checked = true;
+                    } else if (gender.includes('perempuan')) {
+                        document.getElementById('editPerempuan').checked = true;
+                    }
+
+                    // Set Status Laboran radio button
+                    const status = row.cells[2].textContent.toLowerCase(); // Assuming Status column has laboran status info
+                    if (status.includes('admin')) {
+                        document.getElementById('editStatusAdmin').checked = true;
+                    } else if (status.includes('laboran')) {
+                        document.getElementById('editStatusLaboran').checked = true;
+                    } else if (status.includes('kepala lab')) {
+                        document.getElementById('editStatusKepalaLab').checked = true;
+                    }
+                    
+                    // Photo placeholder (real implementation would involve dynamic loading)
+                    document.getElementById('editLaboranPhoto').src = 'user.png';
+
+                    headerTitle.textContent = 'Edit Laboran';
+                    breadcrumb.textContent = 'Data Master Laboran, Mengubah Data Laboran Laboratorium FTI';
+                });
+            });
+
+            backFromEditBtn.addEventListener('click', function() {
+                editLaboranFormContainer.style.display = 'none';
                 laboranListContainer.style.display = 'block';
                 headerTitle.textContent = 'Daftar Laboran';
                 breadcrumb.textContent = 'Data Master Laboran, Menampilkan data Laboran Laboratorium FTI';
