@@ -30,19 +30,11 @@
             <div class="top-bar">
                 <div class="title-breadcrumb">
                     <h2>Daftar Asisten Praktikum</h2>
-                    <span class="breadcrumb">Data Master Asisten Praktikum, Menampilkan data Asisten Praktikum</span>
+                    <span class="breadcrumb" id="main-breadcrumb-text">Data Master Asisten Praktikum, Menampilkan data Asisten Praktikum</span>
                 </div>
                 <div class="user-info">
                     <span class="user-name">Uchiha Atep</span>
                     <img src="user.png" alt="User" class="user-avatar">
-                </div>
-            </div>
-
-            <!-- Kontainer baru untuk navigasi tab, dipindahkan ke kanan -->
-            <div class="content-navigation-bar">
-                <div class="form-navigation right-aligned">
-                    <span class="nav-item active" id="show-list-tab">Data Asisten Praktikum</span>
-                    <span class="nav-item" id="show-add-tab">Tambah Asisten Praktikum</span>
                 </div>
             </div>
 
@@ -208,6 +200,57 @@
                 </div>
             </div>
 
+            <!-- Form Edit Asisten Praktikum (Hidden by default) -->
+            <div class="asisten-edit-form-container" id="asisten-edit-form-container" style="display: none;">
+                <div class="form-header">
+                    <h2><span class="header-icon">📝</span> Edit Asisten Praktikum</h2>
+                </div>
+                <div class="form-content">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="edit_nidn">NIDN</label>
+                            <input type="text" id="edit_nidn" name="edit_nidn" placeholder="NIDN" value="3013200231">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_nama_asisten">Nama Asisten Praktikum</label>
+                            <input type="text" id="edit_nama_asisten" name="edit_nama_asisten" placeholder="Nama Asisten Praktikum" value="Ahmad Faqjan M, S. Kom,">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_alamat">Alamat</label>
+                            <input type="text" id="edit_alamat" name="edit_alamat" placeholder="Alamat Asisten Praktikum" value="Paceti">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_tanggal_lahir">Tanggal Lahir</label>
+                            <div class="date-input-container">
+                                <input type="text" id="edit_tanggal_lahir" name="edit_tanggal_lahir" placeholder="hh/bb/tttt" value="22/03/1994">
+                                <span class="calendar-icon">🗓️</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_nama_prodi">Nama Prodi</label>
+                            <select id="edit_nama_prodi" name="edit_nama_prodi">
+                                <option value="">- Prodi -</option>
+                                <option value="Teknik Informatika" selected>Teknik Informatika</option>
+                                <option value="Sistem Informasi">Sistem Informasi</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-buttons-wrapper">
+                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-simpan">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-back-button-container">
+                    <button class="btn btn-back" id="hide-edit-form-button">← Back</button>
+                </div>
+                <div class="form-footer-text">
+                    Update Data Asisten Praktikum, edit form diatas untuk mengubah data Asisten Praktikum.
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -217,51 +260,83 @@
             const hideAddFormButton = document.getElementById('hide-add-form-button');
             const asistenListContainer = document.getElementById('asisten-list-container');
             const asistenAddFormContainer = document.getElementById('asisten-add-form-container');
+            const asistenEditFormContainer = document.getElementById('asisten-edit-form-container');
 
-            // Tab navigation elements
-            const showListTab = document.getElementById('show-list-tab');
-            const showAddTab = document.getElementById('show-add-tab');
+            const mainBreadcrumbText = document.getElementById('main-breadcrumb-text');
+
+            // Edit buttons in the table
+            const editButtons = document.querySelectorAll('.action-button.edit-button');
+            const hideEditFormButton = document.getElementById('hide-edit-form-button');
 
             function setActiveTab(activeTab) {
-                if (showListTab) showListTab.classList.remove('active');
-                if (showAddTab) showAddTab.classList.remove('active');
-                if (activeTab) activeTab.classList.add('active');
+                // Update main breadcrumb text based on which container is visible
+                if (mainBreadcrumbText) {
+                    if (asistenListContainer.style.display !== 'none') {
+                        mainBreadcrumbText.textContent = 'Data Master Asisten Praktikum, Menampilkan data Asisten Praktikum';
+                    } else if (asistenAddFormContainer.style.display !== 'none') {
+                        mainBreadcrumbText.textContent = 'Form untuk menambahkan data Asisten Praktikum';
+                    } else if (asistenEditFormContainer.style.display !== 'none') {
+                        mainBreadcrumbText.textContent = 'Form untuk melakukan edit data Asisten Praktikum';
+                    }
+                }
             }
 
             showAddFormButton.addEventListener('click', function() {
                 asistenListContainer.style.display = 'none';
+                asistenEditFormContainer.style.display = 'none'; // Hide edit form
                 asistenAddFormContainer.style.display = 'block';
-                setActiveTab(showAddTab);
+                setActiveTab(null); // No active header tab when adding form
             });
 
             hideAddFormButton.addEventListener('click', function() {
                 asistenAddFormContainer.style.display = 'none';
                 asistenListContainer.style.display = 'block';
-                setActiveTab(showListTab);
+                setActiveTab(null); // No active header tab when showing list
             });
 
-            if (showListTab) {
-                showListTab.addEventListener('click', function() {
-                    asistenAddFormContainer.style.display = 'none';
-                    asistenListContainer.style.display = 'block';
-                    setActiveTab(showListTab);
-                });
-            }
-
-            if (showAddTab) {
-                showAddTab.addEventListener('click', function() {
+            // Handle Edit button clicks
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
                     asistenListContainer.style.display = 'none';
-                    asistenAddFormContainer.style.display = 'block';
-                    setActiveTab(showAddTab);
+                    asistenAddFormContainer.style.display = 'none'; // Hide add form
+                    asistenEditFormContainer.style.display = 'block';
+                    setActiveTab(null); // No active header tab when editing form
+
+                    // Optionally, populate the form fields here with data from the clicked row
+                    const row = this.closest('tr');
+                    const nidn = row.children[1].textContent;
+                    const nama = row.children[2].textContent;
+                    const prodi = row.children[3].textContent;
+
+                    // For now, hardcode values as per image, but in a real app, you'd use the extracted data
+                    document.getElementById('edit_nidn').value = nidn;
+                    document.getElementById('edit_nama_asisten').value = nama;
+                    // For address and tanggal_lahir, you'd need actual data or fetch from backend
+                    document.getElementById('edit_alamat').value = ""; // Placeholder
+                    document.getElementById('edit_tanggal_lahir').value = ""; // Placeholder
+                    // Set selected option for prodi
+                    const prodiSelect = document.getElementById('edit_nama_prodi');
+                    for (let i = 0; i < prodiSelect.options.length; i++) {
+                        if (prodiSelect.options[i].value === prodi) {
+                            prodiSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                });
+            });
+
+            // Handle Hide Edit Form button click
+            if (hideEditFormButton) {
+                hideEditFormButton.addEventListener('click', function() {
+                    asistenEditFormContainer.style.display = 'none';
+                    asistenListContainer.style.display = 'block';
+                    setActiveTab(null); // No active header tab when showing list
                 });
             }
 
             // Set initial active tab on page load
-            if (asistenListContainer.style.display !== 'none') {
-                setActiveTab(showListTab);
-            } else if (asistenAddFormContainer.style.display !== 'none') {
-                setActiveTab(showAddTab);
-            }
+            // Initial call to set the correct state based on which container is visible
+            setActiveTab(null); // Call setActiveTab initially to set correct breadcrumb text
 
         });
     </script>
