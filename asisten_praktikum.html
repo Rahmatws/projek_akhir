@@ -38,6 +38,14 @@
                 </div>
             </div>
 
+            <!-- Kontainer baru untuk navigasi tab, dipindahkan ke kanan -->
+            <div class="content-navigation-bar">
+                <div class="form-navigation right-aligned">
+                    <span class="nav-item active" id="show-list-tab">Data Asisten Praktikum</span>
+                    <span class="nav-item" id="show-add-tab">Tambah Asisten Praktikum</span>
+                </div>
+            </div>
+
             <div class="asisten-list-container" id="asisten-list-container">
                 <div class="asisten-list-header">
                     <h2><span class="header-icon">🧑‍🏫</span> Daftar Asisten Praktikum</h2>
@@ -149,7 +157,113 @@
                 </div>
             </div>
 
+            <!-- Form Tambah Asisten Praktikum (Hidden by default) -->
+            <div class="asisten-add-form-container" id="asisten-add-form-container" style="display: none;">
+                <div class="form-header">
+                    <h2><span class="header-icon">+</span> Tambah Asisten Praktikum</h2>
+                </div>
+                <div class="form-content">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="nidn">NIDN</label>
+                            <input type="text" id="nidn" name="nidn" placeholder="NIDN">
+                        </div>
+                        <div class="form-group">
+                            <label for="nama_asisten">Nama Asisten Praktikum</label>
+                            <input type="text" id="nama_asisten" name="nama_asisten" placeholder="Nama Asisten Praktikum">
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" id="alamat" name="alamat" placeholder="Alamat Asisten Praktikum">
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggal_lahir">Tanggal Lahir</label>
+                            <div class="date-input-container">
+                                <input type="text" id="tanggal_lahir" name="tanggal_lahir" placeholder="hh/bb/tttt">
+                                <span class="calendar-icon">🗓️</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nama_prodi">Nama Prodi</label>
+                            <select id="nama_prodi" name="nama_prodi">
+                                <option value="">- Prodi -</option>
+                                <option value="Teknik Informatika">Teknik Informatika</option>
+                                <option value="Sistem Informasi">Sistem Informasi</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-buttons-wrapper">
+                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-simpan">Simpan</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-back-button-container">
+                    <button class="btn btn-back" id="hide-add-form-button">← Back</button>
+                </div>
+                <div class="form-footer-text">
+                    Menambah Data Asisten Praktikum, isi form diatas untuk menambahkan data Asisten Praktikum.
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAddFormButton = document.getElementById('show-add-form-button');
+            const hideAddFormButton = document.getElementById('hide-add-form-button');
+            const asistenListContainer = document.getElementById('asisten-list-container');
+            const asistenAddFormContainer = document.getElementById('asisten-add-form-container');
+
+            // Tab navigation elements
+            const showListTab = document.getElementById('show-list-tab');
+            const showAddTab = document.getElementById('show-add-tab');
+
+            function setActiveTab(activeTab) {
+                if (showListTab) showListTab.classList.remove('active');
+                if (showAddTab) showAddTab.classList.remove('active');
+                if (activeTab) activeTab.classList.add('active');
+            }
+
+            showAddFormButton.addEventListener('click', function() {
+                asistenListContainer.style.display = 'none';
+                asistenAddFormContainer.style.display = 'block';
+                setActiveTab(showAddTab);
+            });
+
+            hideAddFormButton.addEventListener('click', function() {
+                asistenAddFormContainer.style.display = 'none';
+                asistenListContainer.style.display = 'block';
+                setActiveTab(showListTab);
+            });
+
+            if (showListTab) {
+                showListTab.addEventListener('click', function() {
+                    asistenAddFormContainer.style.display = 'none';
+                    asistenListContainer.style.display = 'block';
+                    setActiveTab(showListTab);
+                });
+            }
+
+            if (showAddTab) {
+                showAddTab.addEventListener('click', function() {
+                    asistenListContainer.style.display = 'none';
+                    asistenAddFormContainer.style.display = 'block';
+                    setActiveTab(showAddTab);
+                });
+            }
+
+            // Set initial active tab on page load
+            if (asistenListContainer.style.display !== 'none') {
+                setActiveTab(showListTab);
+            } else if (asistenAddFormContainer.style.display !== 'none') {
+                setActiveTab(showAddTab);
+            }
+
+        });
+    </script>
 </body>
 </html> 
