@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Mata Praktikum</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="mata_praktikum.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="unibba-logo.png" alt="Logo" class="sidebar-logo">
+                <h3>DAFTAR MENU PRAKTIKUM</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html"><i class="icon">🏠</i> Dashboard</a></li>
+                <li><a href="jadwal_praktikum.html"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
+                <li><a href="javascript:void(0);"><i class="icon">🏫</i> Kelas</a></li>
+                <li><a href="javascript:void(0);"><i class="icon">✍️</i> Praktikan</a></li>
+                <li><a href="absensi_kehadiran.html"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="mata_praktikum.html" class="active"><i class="icon">📚</i> Mata Praktikum</a></li>
+                <li><a href="asisten_praktikum.html"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
+                <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
+                <li><a href="laboran.html"><i class="icon">📄</i> Laboran</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="title-breadcrumb">
+                    <h2>Daftar Mata Praktikum</h2>
+                    <span class="breadcrumb" id="main-breadcrumb-text">Data Master Mata Kuliah, Menampilkan data Mata Praktikum Laboratorium FTI UNIBBA</span>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Uchiha Atep</span>
+                    <img src="user.png" alt="User" class="user-avatar">
+                </div>
+            </div>
+
+            <div class="mata-praktikum-list-container" id="mata-praktikum-list-container">
+                <div class="mata-praktikum-list-header">
+                    <h2><span class="header-icon">📚</span> Daftar Mata Praktikum</h2>
+                </div>
+                <div class="mata-praktikum-actions">
+                    <button class="add-mata-praktikum-button" id="show-add-form-button">+ Tambah Mata Praktikum</button>
+                </div>
+
+                <div class="data-table">
+                    <label for="entries">Show</label>
+                    <select name="entries" id="entries">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select> entries
+                    <div class="search-box">
+                        <label for="search">Search:</label>
+                        <input type="text" id="search">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th><span class="sort-icon">⇅</span> Kode Matkum</th>
+                                <th><span class="sort-icon">⇅</span> Nama Matkum</th>
+                                <th><span class="sort-icon">⇅</span> SKS</th>
+                                <th><span class="sort-icon">⇅</span> Semester</th>
+                                <th>Pilihan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>FTI001</td>
+                                <td>Praktikum Pro Model Mantap</td>
+                                <td>2</td>
+                                <td>5</td>
+                                <td>
+                                    <button class="action-button edit-button">📝</button>
+                                    <button class="action-button delete-button">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>FTI002</td>
+                                <td>Praktikum Akuntansi</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>
+                                    <button class="action-button edit-button">📝</button>
+                                    <button class="action-button delete-button">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>FTI003</td>
+                                <td>Praktikum Jaringan Komputer</td>
+                                <td>2</td>
+                                <td>5</td>
+                                <td>
+                                    <button class="action-button edit-button">📝</button>
+                                    <button class="action-button delete-button">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>FTI004</td>
+                                <td>Praktikum Pemodelan dan Simulasi</td>
+                                <td>2</td>
+                                <td>5</td>
+                                <td>
+                                    <button class="action-button edit-button">📝</button>
+                                    <button class="action-button delete-button">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>FTI005</td>
+                                <td>Praktikum Org. dan Arsitektur Komputer</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>
+                                    <button class="action-button edit-button">📝</button>
+                                    <button class="action-button delete-button">🗑️</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>FTI006</td>
+                                <td>Praktikum Statistik dan Probabilitas</td>
+                                <td>2</td>
+                                <td>3</td>
+                                <td>
+                                    <button class="action-button edit-button">📝</button>
+                                    <button class="action-button delete-button">🗑️</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="table-footer">
+                        <span>Showing 1 to 6 of 6 entries</span>
+                        <div class="pagination">
+                            <button class="prev-button">Previous</button>
+                            <button class="page-button active">1</button>
+                            <button class="next-button">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
