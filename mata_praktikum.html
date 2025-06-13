@@ -187,6 +187,45 @@
                     Menambah Data Mata Praktikum, isi form diatas untuk menambahkan data Mata Praktikum.
                 </div>
             </div>
+
+            <!-- Form Edit Mata Praktikum (Hidden by default) -->
+            <div class="mata-praktikum-edit-form-container" id="mata-praktikum-edit-form-container" style="display: none;">
+                <div class="form-header">
+                    <h2><span class="header-icon">📝</span> Edit Mata Praktikum</h2>
+                </div>
+                <div class="form-content">
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="edit_kode_matkul">Kode Mata Praktikum</label>
+                            <input type="text" id="edit_kode_matkul" name="edit_kode_matkul" placeholder="Kode Mata Praktikum" value="FTI001">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_nama_matkul">Nama Mata Praktikum</label>
+                            <input type="text" id="edit_nama_matkul" name="edit_nama_matkul" placeholder="Nama Mata Praktikum" value="Praktikum Pro Model Mantap">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_sks">SKS</label>
+                            <input type="number" id="edit_sks" name="edit_sks" placeholder="SKS" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_semester">Semester</label>
+                            <input type="number" id="edit_semester" name="edit_semester" placeholder="Semester" value="5">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-buttons-wrapper">
+                                <button type="reset" class="btn btn-reset">Reset</button>
+                                <button type="submit" class="btn btn-simpan">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-back-button-container">
+                    <button class="btn btn-back" id="hide-edit-form-button">← Back</button>
+                </div>
+                <div class="form-footer-text">
+                    Update Data Mata Praktikum, edit form diatas untuk mengubah data Mata Praktikum.
+                </div>
+            </div>
         </div>
     </div>
 
@@ -196,8 +235,13 @@
             const hideAddFormButton = document.getElementById('hide-add-form-button');
             const mataPraktikumListContainer = document.getElementById('mata-praktikum-list-container');
             const mataPraktikumAddFormContainer = document.getElementById('mata-praktikum-add-form-container');
+            const mataPraktikumEditFormContainer = document.getElementById('mata-praktikum-edit-form-container');
 
             const mainBreadcrumbText = document.getElementById('main-breadcrumb-text');
+
+            // Edit buttons in the table
+            const editButtons = document.querySelectorAll('.action-button.edit-button');
+            const hideEditFormButton = document.getElementById('hide-edit-form-button');
 
             function updateBreadcrumbText() {
                 if (mainBreadcrumbText) {
@@ -205,12 +249,15 @@
                         mainBreadcrumbText.textContent = 'Data Master Mata Kuliah, Menampilkan data Mata Praktikum Laboratorium FTI UNIBBA';
                     } else if (mataPraktikumAddFormContainer.style.display !== 'none') {
                         mainBreadcrumbText.textContent = 'Form untuk menambahkan data Mata Praktikum';
+                    } else if (mataPraktikumEditFormContainer.style.display !== 'none') {
+                        mainBreadcrumbText.textContent = 'Form untuk melakukan edit data Mata Praktikum';
                     }
                 }
             }
 
             showAddFormButton.addEventListener('click', function() {
                 mataPraktikumListContainer.style.display = 'none';
+                mataPraktikumEditFormContainer.style.display = 'none'; // Hide edit form
                 mataPraktikumAddFormContainer.style.display = 'block';
                 updateBreadcrumbText();
             });
@@ -220,6 +267,32 @@
                 mataPraktikumListContainer.style.display = 'block';
                 updateBreadcrumbText();
             });
+
+            // Handle Edit button clicks
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    mataPraktikumListContainer.style.display = 'none';
+                    mataPraktikumAddFormContainer.style.display = 'none'; // Hide add form
+                    mataPraktikumEditFormContainer.style.display = 'block';
+                    updateBreadcrumbText();
+
+                    // Populate the form fields with data from the clicked row
+                    const row = this.closest('tr');
+                    document.getElementById('edit_kode_matkul').value = row.children[1].textContent;
+                    document.getElementById('edit_nama_matkul').value = row.children[2].textContent;
+                    document.getElementById('edit_sks').value = row.children[3].textContent;
+                    document.getElementById('edit_semester').value = row.children[4].textContent;
+                });
+            });
+
+            // Handle Hide Edit Form button click
+            if (hideEditFormButton) {
+                hideEditFormButton.addEventListener('click', function() {
+                    mataPraktikumEditFormContainer.style.display = 'none';
+                    mataPraktikumListContainer.style.display = 'block';
+                    updateBreadcrumbText();
+                });
+            }
 
             // Initial call to set the correct breadcrumb text on page load
             updateBreadcrumbText();

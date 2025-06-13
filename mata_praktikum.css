@@ -295,4 +295,136 @@
 
 .mata-praktikum-add-form-container .btn-back:hover {
     background-color: #c82333;
+}
+
+/* Styles for Edit Form Container - similar to add form */
+.mata-praktikum-edit-form-container {
+    background: #fff;
+    border-radius: 12px;
+    margin: 24px 40px 0 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding-bottom: 24px;
+}
+
+.mata-praktikum-edit-form-container .form-header {
+    background: #6a11cb; /* Solid purple color */
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.15em;
+    padding: 14px 24px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+}
+
+.mata-praktikum-edit-form-container .form-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.mata-praktikum-edit-form-container .form-header .header-icon {
+    font-size: 1.2em;
+}
+
+.mata-praktikum-edit-form-container .form-content {
+    padding: 20px 60px;
+}
+
+.mata-praktikum-edit-form-container .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.mata-praktikum-edit-form-container .form-group label {
+    flex: 0 0 200px;
+    margin-right: 20px;
+    font-weight: bold;
+    color: #555;
+    text-align: right;
+}
+
+.mata-praktikum-edit-form-container .form-group input[type="text"],
+.mata-praktikum-edit-form-container .form-group input[type="number"],
+.mata-praktikum-edit-form-container .form-group select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    max-width: 400px;
+}
+
+.mata-praktikum-edit-form-container .form-group input[type="text"]::placeholder,
+.mata-praktikum-edit-form-container .form-group input[type="number"]::placeholder {
+    color: #bbb;
+}
+
+.mata-praktikum-edit-form-container .form-buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.mata-praktikum-edit-form-container .btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.mata-praktikum-edit-form-container .btn-reset {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+.mata-praktikum-edit-form-container .btn-reset:hover {
+    background-color: #0056b3;
+}
+
+.mata-praktikum-edit-form-container .btn-simpan {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+.mata-praktikum-edit-form-container .btn-simpan:hover {
+    background-color: #218838;
+}
+
+.mata-praktikum-edit-form-container .form-footer-text {
+    text-align: left;
+    font-size: 0.9em;
+    color: #666;
+    padding: 20px 40px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.mata-praktikum-edit-form-container .form-back-button-container {
+    padding: 0 40px 20px 0;
+    text-align: right;
+    margin-top: -10px; /* Adjust margin to bring it closer to the form */
+}
+
+.mata-praktikum-edit-form-container .btn-back {
+    background-color: #dc3545; /* Red */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.mata-praktikum-edit-form-container .btn-back:hover {
+    background-color: #c82333;
 } 
