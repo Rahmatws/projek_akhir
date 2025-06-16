@@ -6,8 +6,46 @@
     <title>Daftar Asisten Praktikum</title>
     <link rel="stylesheet" href="asisten_praktikum.css">
     <link rel="stylesheet" href="dashboard.css"> <!-- Untuk sidebar dan general styling -->
+    <meta http-equiv="Expires" content="0">
 </head>
 <body>
+    <?php
+    require_once 'db_connect.php'; // Sertakan file koneksi database
+
+    // --- Pagination Logic --- 
+    $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10; // Jumlah entri per halaman
+    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini
+    $offset = ($current_page - 1) * $limit_per_page; // Offset untuk query SQL
+
+    // --- Search Logic --- 
+    $search_query = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+    $where_clause = '';
+    if (!empty($search_query)) {
+        $where_clause = " WHERE nidn LIKE '%$search_query%' OR nama_asisten LIKE '%$search_query%' OR nama_prodi LIKE '%$search_query%'";
+    }
+
+    // Query untuk mendapatkan total records (dengan atau tanpa pencarian)
+    $total_records_sql = "SELECT COUNT(id) AS total FROM asisten_praktikum" . $where_clause;
+    $total_records_result = $conn->query($total_records_sql);
+    $total_records_row = $total_records_result->fetch_assoc();
+    $total_records = $total_records_row['total'];
+
+    // Hitung total halaman
+    $total_pages = ceil($total_records / $limit_per_page);
+
+    // Pastikan current_page tidak lebih dari total_pages atau kurang dari 1
+    if ($current_page > $total_pages && $total_pages > 0) {
+        $current_page = $total_pages; // Set ke halaman terakhir jika melebihi total halaman
+        $offset = ($current_page - 1) * $limit_per_page;
+    } elseif ($current_page < 1) {
+        $current_page = 1; // Set ke halaman pertama jika kurang dari 1
+        $offset = 0;
+    }
+
+    // Query untuk mendapatkan data asisten praktikum (dengan pencarian dan pagination)
+    $sql = "SELECT id, nidn, nama_asisten, nama_prodi FROM asisten_praktikum" . $where_clause . " ORDER BY id ASC LIMIT $limit_per_page OFFSET $offset";
+    $result = $conn->query($sql);
+    ?>
     <div class="dashboard-container">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -21,7 +59,7 @@
                 <li><a href="javascript:void(0);"><i class="icon">✍️</i> Praktikan</a></li>
                 <li><a href="absensi_kehadiran.html"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="javascript:void(0);"><i class="icon">📚</i> Mata Praktikum</a></li>
-                <li><a href="asisten_praktikum.html" class="active"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
+                <li><a href="asisten_praktikum.php" class="active"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.html"><i class="icon">📄</i> Laboran</a></li>
             </ul>
@@ -49,11 +87,13 @@
                 <div class="data-table">
                     <label for="entries">Show</label>
                     <select name="entries" id="entries">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select> entries
+                        <option value="10" <?php echo ($limit_per_page == 10) ? 'selected' : ''; ?>>10</option>
+                        <option value="25" <?php echo ($limit_per_page == 25) ? 'selected' : ''; ?>>25</option>
+                        <option value="50" <?php echo ($limit_per_page == 50) ? 'selected' : ''; ?>>50</option>
+                        <option value="100" <?php echo ($limit_per_page == 100) ? 'selected' : ''; ?>>100</option>
+                        <option value="manual_input" <?php echo (!in_array($limit_per_page, [10, 25, 50, 100]) && $limit_per_page > 0) ? 'selected' : ''; ?>>Lainnya</option>
+                    </select>
+                    <input type="number" id="manual_entries_input" name="manual_entries" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin-left: 5px; display: none;" min="1" value="<?php echo (!in_array($limit_per_page, [10, 25, 50, 100]) && $limit_per_page > 0) ? $limit_per_page : ''; ?>"> entries
                     <div class="search-box">
                         <label for="search">Search:</label>
                         <input type="text" id="search">
@@ -69,80 +109,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>3013200231</td>
-                                <td>Ahmad Faqjan M, S. Kom,</td>
-                                <td>Teknik Informatika</td>
-                                <td>
-                                    <button class="action-button view-button">📊</button>
-                                    <button class="action-button edit-button">📝</button>
-                                    <button class="action-button delete-button">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>3013200232</td>
-                                <td>Cecep Suwanda, S.Si</td>
-                                <td>Teknik Informatika</td>
-                                <td>
-                                    <button class="action-button view-button">📊</button>
-                                    <button class="action-button edit-button">📝</button>
-                                    <button class="action-button delete-button">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>3013200237</td>
-                                <td>Junaedin Moch</td>
-                                <td>Sistem Informasi</td>
-                                <td>
-                                    <button class="action-button view-button">📊</button>
-                                    <button class="action-button edit-button">📝</button>
-                                    <button class="action-button delete-button">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>32411003</td>
-                                <td>Nochamad Ridwan, ST.</td>
-                                <td>Teknik Informatika</td>
-                                <td>
-                                    <button class="action-button view-button">📊</button>
-                                    <button class="action-button edit-button">📝</button>
-                                    <button class="action-button delete-button">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>32411004</td>
-                                <td>Yusuf Muharam, S.Kom., MT.</td>
-                                <td>Teknik Informatika</td>
-                                <td>
-                                    <button class="action-button view-button">📊</button>
-                                    <button class="action-button edit-button">📝</button>
-                                    <button class="action-button delete-button">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>65787677</td>
-                                <td>Junaedin M</td>
-                                <td>Sistem Informasi</td>
-                                <td>
-                                    <button class="action-button view-button">📊</button>
-                                    <button class="action-button edit-button">📝</button>
-                                    <button class="action-button delete-button">🗑️</button>
-                                </td>
-                            </tr>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                $no = $offset + 1; // Sesuaikan nomor urut dengan offset
+                                // Output data setiap baris
+                                while($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . $no++ . "</td>";
+                                    echo "<td>" . htmlspecialchars($row["nidn"]) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row["nama_asisten"]) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row["nama_prodi"]) . "</td>";
+                                    echo "<td>";
+                                    echo "<button class=\"action-button view-button\">📊</button>";
+                                    echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
+                                    echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan=\"5\">Tidak ada data asisten praktikum yang ditemukan.</td></tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                     <div class="table-footer">
-                        <span>Showing 1 to 6 of 6 entries</span>
+                        <span>Showing <?php echo $offset + 1; ?> to <?php echo min($offset + $limit_per_page, $total_records); ?> of <?php echo $total_records; ?> entries</span>
                         <div class="pagination">
-                            <button class="prev-button">Previous</button>
-                            <button class="page-button active">1</button>
-                            <button class="next-button">Next</button>
+                            <button class="prev-button" <?php echo ($current_page <= 1) ? 'disabled' : ''; ?>>Previous</button>
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <button class="page-button <?php echo ($i == $current_page) ? 'active' : ''; ?>"><?php echo $i; ?></button>
+                            <?php endfor; ?>
+                            <button class="next-button" <?php echo ($current_page >= $total_pages) ? 'disabled' : ''; ?>>Next</button>
                         </div>
                     </div>
                     <p class="table-info-text"></p>
@@ -155,14 +152,14 @@
                     <h2><span class="header-icon">+</span> Tambah Asisten Praktikum</h2>
                 </div>
                 <div class="form-content">
-                    <form action="#" method="POST">
+                    <form action="add_asisten_praktikum.php" method="POST">
                         <div class="form-group">
                             <label for="nidn">NIDN</label>
-                            <input type="text" id="nidn" name="nidn" placeholder="NIDN">
+                            <input type="text" id="nidn" name="nidn" placeholder="NIDN" required>
                         </div>
                         <div class="form-group">
                             <label for="nama_asisten">Nama Asisten Praktikum</label>
-                            <input type="text" id="nama_asisten" name="nama_asisten" placeholder="Nama Asisten Praktikum">
+                            <input type="text" id="nama_asisten" name="nama_asisten" placeholder="Nama Asisten Praktikum" required>
                         </div>
                         <div class="form-group">
                             <label for="alamat">Alamat</label>
@@ -171,14 +168,14 @@
                         <div class="form-group">
                             <label for="tanggal_lahir">Tanggal Lahir</label>
                             <div class="date-input-container">
-                                <input type="text" id="tanggal_lahir" name="tanggal_lahir" placeholder="hh/bb/tttt">
+                                <input type="text" id="tanggal_lahir" name="tanggal_lahir" placeholder="dd/mm/yyyy">
                                 <span class="calendar-icon">🗓️</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="nama_prodi">Nama Prodi</label>
-                            <select id="nama_prodi" name="nama_prodi">
-                                <option value="">- Prodi -</option>
+                            <select id="nama_prodi" name="nama_prodi" required>
+                                <option value="">- Pilih Prodi -</option>
                                 <option value="Teknik Informatika">Teknik Informatika</option>
                                 <option value="Sistem Informasi">Sistem Informasi</option>
                                 <!-- Add more options as needed -->
@@ -337,6 +334,119 @@
             // Set initial active tab on page load
             // Initial call to set the correct state based on which container is visible
             setActiveTab(null); // Call setActiveTab initially to set correct breadcrumb text
+
+            // --- Pagination and Search Logic --- Start
+            const entriesSelect = document.getElementById('entries');
+            const manualEntriesInput = document.getElementById('manual_entries_input');
+            const searchInput = document.getElementById('search');
+            const paginationContainer = document.querySelector('.pagination');
+            
+            // Helper function to update URL parameters
+            function updateUrlParameter(param, value) {
+                const url = new URL(window.location.href);
+                url.searchParams.set(param, value);
+                // When changing entries or search, reset page to 1
+                if (param === 'entries' || param === 'search') {
+                    url.searchParams.set('page', 1);
+                }
+                window.location.href = url.toString();
+            }
+
+            // Function to check and show/hide manual input
+            function toggleManualEntriesInput() {
+                if (entriesSelect.value === 'manual_input') {
+                    manualEntriesInput.style.display = 'inline-block';
+                    // Set focus to the manual input if it's new
+                    if (manualEntriesInput.value === '') {
+                        manualEntriesInput.focus();
+                    }
+                } else {
+                    manualEntriesInput.style.display = 'none';
+                }
+            }
+
+            // Initial check on page load
+            toggleManualEntriesInput();
+
+            // Event listener for 'Show entries' dropdown
+            if (entriesSelect) {
+                entriesSelect.addEventListener('change', function() {
+                    toggleManualEntriesInput(); // Call toggle function first
+
+                    let valueToSet = this.value;
+                    if (valueToSet === 'manual_input') {
+                        // If 'Lainnya' is selected, don't update URL yet, wait for manual input
+                        return;
+                    } else {
+                        updateUrlParameter('entries', valueToSet);
+                    }
+                });
+            }
+
+            // New Event listener for manual entries input
+            if (manualEntriesInput) {
+                let manualEntriesTimeout;
+                manualEntriesInput.addEventListener('input', function() {
+                    clearTimeout(manualEntriesTimeout);
+                    manualEntriesTimeout = setTimeout(() => {
+                        const value = parseInt(this.value);
+                        if (!isNaN(value) && value > 0) {
+                            updateUrlParameter('entries', value);
+                        } else if (this.value === '') {
+                            // If input is cleared, revert to default entries (e.g., 10)
+                            updateUrlParameter('entries', entriesSelect.options[0].value);
+                        }
+                    }, 500); // Debounce for 500ms
+                });
+
+                manualEntriesInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        clearTimeout(manualEntriesTimeout);
+                        const value = parseInt(this.value);
+                        if (!isNaN(value) && value > 0) {
+                            updateUrlParameter('entries', value);
+                        } else if (this.value === '') {
+                            updateUrlParameter('entries', entriesSelect.options[0].value);
+                        }
+                    }
+                });
+            }
+
+            // Event listener for 'Search' input with debounce for automatic search
+            if (searchInput) {
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        updateUrlParameter('search', this.value);
+                    }, 500); // Debounce for 500ms (adjust as needed)
+                });
+
+                // Also allow search on Enter key press without debounce delay
+                searchInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        clearTimeout(searchTimeout); // Clear debounce if Enter is pressed
+                        updateUrlParameter('search', this.value);
+                    }
+                });
+            }
+
+            // Event listeners for pagination buttons (delegation for dynamic buttons)
+            if (paginationContainer) {
+                paginationContainer.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('prev-button') && !event.target.disabled) {
+                        const currentPage = parseInt(new URL(window.location.href).searchParams.get('page') || '1');
+                        updateUrlParameter('page', currentPage - 1);
+                    } else if (event.target.classList.contains('next-button') && !event.target.disabled) {
+                        const currentPage = parseInt(new URL(window.location.href).searchParams.get('page') || '1');
+                        updateUrlParameter('page', currentPage + 1);
+                    } else if (event.target.classList.contains('page-button')) {
+                        const pageNum = parseInt(event.target.textContent);
+                        updateUrlParameter('page', pageNum);
+                    }
+                });
+            }
+            // --- Pagination and Search Logic --- End
 
         });
     </script>
