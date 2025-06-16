@@ -155,25 +155,86 @@
     text-align: center; /* Center content in Pilihan column */
 }
 
-.data-table td .action-buttons button {
-    padding: 5px 10px;
-    margin: 0 2px;
-    font-size: 0.8em;
+.action-buttons-wrapper {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    gap: 5px; /* Add some space between buttons */
 }
 
-.data-table td .action-buttons .view-button {
+/* Styles for action buttons (Edit, Delete) */
+.action-button {
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.85em;
+    margin: 0 2px;
+    transition: background-color 0.3s ease;
+    background-color: #ffc107; /* Default background for all action buttons */
+    color: white;
+}
+
+.action-button.edit-button {
     background-color: #ffc107; /* Yellow */
     color: #212529;
 }
 
-.data-table td .action-buttons .edit-button {
-    background-color: #17a2b8; /* Info Blue/Cyan */
+.action-button.edit-button:hover {
+    background-color: #e0a800;
+}
+
+.action-button.delete-button {
+    background-color: #dc3545; /* Red */
     color: white;
 }
 
-.data-table td .action-buttons .delete-button {
-    background-color: #dc3545; /* Red */
+.action-button.delete-button:hover {
+    background-color: #c82333;
+}
+
+.action-button.view-button {
+    background-color: #4CAF50; /* Green, as seen in asisten_praktikum.css */
     color: white;
+}
+
+.action-button.view-button:hover {
+    background-color: #45a049;
+}
+
+/* Styles for table footer and pagination */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.pagination button {
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 0 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination button.active {
+    background-color: #0056b3;
+}
+
+.table-info-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
 }
 
 /* Styles for Add Schedule Form */
