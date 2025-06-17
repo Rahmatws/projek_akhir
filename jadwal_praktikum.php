@@ -297,46 +297,46 @@ $result = $conn->query($sql);
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const addScheduleButton = document.querySelector('.add-schedule-button');
-            const addScheduleForm = document.querySelector('.add-schedule-form');
-            const editScheduleButton = document.querySelector('.edit-schedule-button');
-            const editScheduleForm = document.querySelector('.edit-schedule-form');
-            const mainContent = document.querySelector('.main-content');
-            const scheduleHeader = document.getElementById('schedule-header');
-            const scheduleHeaderTitle = scheduleHeader.querySelector('h2');
-            const scheduleActions = document.getElementById('schedule-actions');
-            const headerIcon = document.getElementById('header-icon');
+        const addScheduleButton = document.querySelector('.add-schedule-button');
+        const addScheduleForm = document.querySelector('.add-schedule-form');
+        const editScheduleButton = document.querySelector('.edit-schedule-button');
+        const editScheduleForm = document.querySelector('.edit-schedule-form');
+        const mainContent = document.querySelector('.main-content');
+        const scheduleHeader = document.getElementById('schedule-header');
+        const scheduleHeaderTitle = scheduleHeader.querySelector('h2');
+        const scheduleActions = document.getElementById('schedule-actions');
+        const headerIcon = document.getElementById('header-icon');
 
-            addScheduleButton.addEventListener('click', () => {
-                addScheduleForm.style.display = (addScheduleForm.style.display === 'none' || addScheduleForm.style.display === '') ? 'block' : 'none';
-                editScheduleForm.style.display = 'none';
-                mainContent.classList.remove('editing');
+        addScheduleButton.addEventListener('click', () => {
+            addScheduleForm.style.display = (addScheduleForm.style.display === 'none' || addScheduleForm.style.display === '') ? 'block' : 'none';
+            editScheduleForm.style.display = 'none';
+            mainContent.classList.remove('editing');
+            scheduleHeader.classList.remove('edit-mode');
+            if (addScheduleForm.style.display === 'block') {
+                mainContent.classList.add('adding');
+                scheduleHeader.classList.add('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">➕</span>Tambah Jadwal Praktikum';
+            } else {
+                mainContent.classList.remove('adding');
                 scheduleHeader.classList.remove('edit-mode');
-                if (addScheduleForm.style.display === 'block') {
-                    mainContent.classList.add('adding');
-                    scheduleHeader.classList.add('edit-mode');
-                    scheduleHeaderTitle.innerHTML = '<span class="header-icon">➕</span>Tambah Jadwal Praktikum';
-                } else {
-                    mainContent.classList.remove('adding');
-                    scheduleHeader.classList.remove('edit-mode');
-                    scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
-                }
-            });
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+            }
+        });
 
             // Event listener for the main "Data Ubah Jadwal" button
-            editScheduleButton.addEventListener('click', () => {
-                editScheduleForm.style.display = (editScheduleForm.style.display === 'none' || editScheduleForm.style.display === '') ? 'block' : 'none';
-                addScheduleForm.style.display = 'none';
-                if (editScheduleForm.style.display === 'block') {
-                    mainContent.classList.add('editing');
-                    mainContent.classList.remove('adding');
-                    scheduleHeader.classList.add('edit-mode');
-                    scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
-                } else {
-                    mainContent.classList.remove('editing');
-                    mainContent.classList.remove('adding');
-                    scheduleHeader.classList.remove('edit-mode');
-                    scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+        editScheduleButton.addEventListener('click', () => {
+            editScheduleForm.style.display = (editScheduleForm.style.display === 'none' || editScheduleForm.style.display === '') ? 'block' : 'none';
+            addScheduleForm.style.display = 'none';
+            if (editScheduleForm.style.display === 'block') {
+                mainContent.classList.add('editing');
+                mainContent.classList.remove('adding');
+                scheduleHeader.classList.add('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
+            } else {
+                mainContent.classList.remove('editing');
+                mainContent.classList.remove('adding');
+                scheduleHeader.classList.remove('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
                 }
             });
 
