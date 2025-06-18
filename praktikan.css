@@ -1,0 +1,329 @@
+body {
+    background-color: #f4f7f6;
+}
+
+.praktikan-box {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.praktikan-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #27ae60;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 18px 24px 12px 24px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.praktikan-box-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.praktikan-box-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.praktikan-header-bar {
+    background: #28a745;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 24px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
+}
+
+.praktikan-header-bar h3 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.praktikan-actions-bar {
+    display: flex;
+    gap: 10px;
+    padding: 16px 24px 0 24px;
+    background: #fff;
+    border-radius: 0 0 0 0;
+    margin-bottom: 0;
+}
+
+.btn-green {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-green:hover { background: #218838; }
+
+.btn-purple {
+    background: #b23cff;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-purple:hover { background: #8e24aa; }
+
+.praktikan-table-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px 24px 10px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.praktikan-table-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.praktikan-table-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+    width: 100%;
+}
+
+.table-actions-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.btn-orange {
+    background: #ffc107;
+    color: #212529;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-orange:hover { background: #e0a800; }
+
+.btn-red {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-red:hover { background: #a71d2a; }
+
+.search-box input[type="text"] {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.praktikan-table-wrapper {
+    background: #fff;
+    padding: 0 24px 0 24px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: none;
+}
+
+.praktikan-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+}
+
+.praktikan-table th, .praktikan-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 8px;
+    text-align: left;
+}
+
+.praktikan-table th {
+    background: #d4edda;
+    color: #155724;
+    font-weight: bold;
+    text-align: center;
+}
+
+.praktikan-table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.praktikan-pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin: 15px 24px 0 0;
+}
+
+.btn-page {
+    background: #fff;
+    border: 1px solid #28a745;
+    color: #28a745;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-page.active, .btn-page:hover {
+    background: #28a745;
+    color: #fff;
+}
+
+.praktikan-table th:last-child, .praktikan-table td:last-child {
+    width: 40px;
+    text-align: center;
+}
+
+.praktikan-table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #28a745;
+    cursor: pointer;
+}
+
+.praktikan-add-section {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.praktikan-add-header {
+    background: #b23cff;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 24px;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.add-icon {
+    font-size: 1.2em;
+}
+.add-title {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.praktikan-add-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px 0 24px;
+    background: #fff;
+    border-radius: 0 0 10px 10px;
+    margin-top: 0;
+}
+
+.footer-right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-purple {
+    background: #b23cff;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-purple:hover { background: #8e24aa; }
+
+.btn-back {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-back:hover { background: #a71d2a; }
+
+.btn-reset {
+    background: #17a2b8;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-reset:hover { background: #117a8b; }
+
+.btn-green {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-green:hover { background: #218838; }
+
+.btn-del-row {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background 0.2s;
+}
+.btn-del-row:hover { background: #a71d2a; }
+
+.praktikan-add-section input[type="text"],
+.praktikan-add-section select {
+    width: 100%;
+    padding: 7px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.praktikan-add-section td {
+    vertical-align: middle;
+} 

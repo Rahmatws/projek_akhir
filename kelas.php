@@ -60,8 +60,8 @@
             <ul class="sidebar-menu">
                 <li><a href="dashboard.html"><i class="icon">🏠</i> Dashboard</a></li>
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
-                <li><a href="kelas.html" class="active"><i class="icon">🏫</i> Kelas</a></li>
-                <li><a href="praktikan.html"><i class="icon">✍️</i> Praktikan</a></li>
+                <li><a href="kelas.php" class="active"><i class="icon">🏫</i> Kelas</a></li>
+                <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
                 <li><a href="absensi_kehadiran.html"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.html"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
