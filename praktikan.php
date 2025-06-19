@@ -47,28 +47,32 @@
                 </div>
                 <!-- Tabel Daftar Praktikan -->
                 <div class="praktikan-table-section" id="praktikan-table-section">
+                    <form id="filterForm" method="get" style="margin-bottom:0;">
                     <div class="praktikan-table-controls">
                         <div class="praktikan-table-left">
                             <label>Show
-                                <select>
-                                    <option>10</option>
-                                    <option>25</option>
-                                    <option>50</option>
-                                    <option>100</option>
+                                <select name="entries" id="entriesSelect">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="manual_input">Lainnya</option>
                                 </select>
+                                <input type="number" id="manualEntriesInput" name="manual_entries" min="1" style="width: 80px; display:none; margin-left:5px;" placeholder="Jumlah">
                                 entries
                             </label>
                         </div>
                         <div class="praktikan-table-right">
                             <div class="table-actions-group">
-                                <button class="btn-orange">Edit</button>
-                                <button class="btn-red">Hapus</button>
+                                <button type="button" class="btn-orange">Edit</button>
+                                <button type="button" class="btn-red">Hapus</button>
                             </div>
                             <div class="search-box">
-                                <label>Search: <input type="text" placeholder="Cari..."></label>
+                                <label>Search: <input type="text" name="search" id="searchInput" placeholder="Cari..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"></label>
                             </div>
                         </div>
                     </div>
+                    </form>
                     <div class="praktikan-table-wrapper">
                         <table class="praktikan-table">
                             <thead>
@@ -83,106 +87,69 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>301210010</td>
-                                    <td>Alwi Nurmalik Ibrahim</td>
-                                    <td>Majalaya</td>
-                                    <td>11-07-2001</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>301210009</td>
-                                    <td>Riska Nurhayan</td>
-                                    <td>Baleendah</td>
-                                    <td>23-12-2001</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>301210008</td>
-                                    <td>Rabiatul Islami</td>
-                                    <td>Ciparay</td>
-                                    <td>11-05-2002</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>301210007</td>
-                                    <td>Mohammad Anwar Saepuddin</td>
-                                    <td>Buah Batu</td>
-                                    <td>04-04-2002</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>301210006</td>
-                                    <td>Moch Rivel Aghiya M.</td>
-                                    <td>Majalaya</td>
-                                    <td>06-03-2002</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>301210005</td>
-                                    <td>Lorenza Shela Tansyah</td>
-                                    <td>Ciparay</td>
-                                    <td>11-07-2000</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td>301210004</td>
-                                    <td>Agus Suryana</td>
-                                    <td>Baleendah</td>
-                                    <td>11-10-2001</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td>301210003</td>
-                                    <td>Syahrizal Suhavi Alam</td>
-                                    <td>Rancaekek</td>
-                                    <td>12-11-2001</td>
-                                    <td>Teknik Informatika</td>
-                                    <td><input type="checkbox" class="row-checkbox"></td>
-                                </tr>
+                                <?php
+                                include 'db_connect.php';
+                                $limit_per_page = 10;
+                                if (isset($_GET['entries'])) {
+                                    if ($_GET['entries'] === 'manual_input' && isset($_GET['manual_entries']) && intval($_GET['manual_entries']) > 0) {
+                                        $limit_per_page = intval($_GET['manual_entries']);
+                                    } else if (in_array($_GET['entries'], ['10','25','50','100'])) {
+                                        $limit_per_page = intval($_GET['entries']);
+                                    }
+                                }
+                                $current_page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+                                $offset = ($current_page - 1) * $limit_per_page;
+                                $search_query = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+                                $where_clause = '';
+                                if (!empty($search_query)) {
+                                    $where_clause = " WHERE nim LIKE '%$search_query%' OR nama_lengkap LIKE '%$search_query%' OR alamat LIKE '%$search_query%' OR prodi LIKE '%$search_query%'";
+                                }
+                                $total_sql = "SELECT COUNT(nim) AS total FROM praktikan" . $where_clause;
+                                $total_result = $conn->query($total_sql);
+                                $total_row = $total_result->fetch_assoc();
+                                $total_records = $total_row['total'];
+                                $total_pages = ceil($total_records / $limit_per_page);
+                                $sql = "SELECT * FROM praktikan" . $where_clause . " ORDER BY nim ASC LIMIT $limit_per_page OFFSET $offset";
+                                $result = $conn->query($sql);
+                                if ($result && $result->num_rows > 0) {
+                                    $no = $offset + 1;
+                                    while($row = $result->fetch_assoc()) {
+                                        echo "<tr>
+                                            <td>" . $no . "</td>
+                                            <td>" . htmlspecialchars($row['nim']) . "</td>
+                                            <td>" . htmlspecialchars($row['nama_lengkap']) . "</td>
+                                            <td>" . htmlspecialchars($row['alamat']) . "</td>
+                                            <td>" . date('d-m-Y', strtotime($row['tgl_lahir'])) . "</td>
+                                            <td>" . htmlspecialchars($row['prodi']) . "</td>
+                                            <td><input type='checkbox' class='row-checkbox'></td>
+                                        </tr>";
+                                        $no++;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='7' style='text-align: center;'>Tidak ada data praktikan</td></tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
-                    <script>
-                    // Select All Checkbox Functionality
-                    const selectAll = document.getElementById('select-all');
-                    const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-                    selectAll.addEventListener('change', function() {
-                        rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
-                    });
-                    rowCheckboxes.forEach(cb => {
-                        cb.addEventListener('change', function() {
-                            if (!cb.checked) {
-                                selectAll.checked = false;
-                            } else {
-                                // Jika semua baris dicentang, header juga ikut centang
-                                if ([...rowCheckboxes].every(c => c.checked)) {
-                                    selectAll.checked = true;
-                                }
-                            }
-                        });
-                    });
-                    </script>
                     <div class="praktikan-pagination">
-                        <button class="btn-page">Previous</button>
-                        <button class="btn-page active">1</button>
-                        <button class="btn-page">2</button>
-                        <button class="btn-page">Next</button>
+                        <a href="?<?php
+                            $params = $_GET;
+                            $params['page'] = max(1, $current_page-1);
+                            echo http_build_query($params);
+                        ?>" class="btn-page" <?php if($current_page<=1) echo 'style="pointer-events:none;opacity:0.5;"'; ?>>Previous</a>
+                        <?php for($i=1;$i<=$total_pages;$i++): ?>
+                            <a href="?<?php
+                                $params = $_GET;
+                                $params['page'] = $i;
+                                echo http_build_query($params);
+                            ?>" class="btn-page<?php if($i==$current_page) echo ' active'; ?>"><?php echo $i; ?></a>
+                        <?php endfor; ?>
+                        <a href="?<?php
+                            $params = $_GET;
+                            $params['page'] = min($total_pages, $current_page+1);
+                            echo http_build_query($params);
+                        ?>" class="btn-page" <?php if($current_page>=$total_pages) echo 'style="pointer-events:none;opacity:0.5;"'; ?>>Next</a>
                     </div>
                 </div>
                 <!-- Form Tambah Multi Praktikan -->
@@ -190,7 +157,7 @@
                     <div class="praktikan-add-header">
                         <span class="add-icon">➕</span> <span class="add-title">Tambah Multi Praktikan</span>
                     </div>
-                    <form id="form-multi-praktikan" autocomplete="off">
+                    <form id="form-multi-praktikan" method="post" action="add_praktikan.php" autocomplete="off">
                         <table class="praktikan-table">
                             <thead>
                                 <tr>
@@ -268,6 +235,50 @@
                     const rows = document.querySelectorAll('#add-praktikan-tbody tr');
                     rows.forEach((tr, i) => tr.children[0].textContent = i + 1);
                 }
+                // Show Entries & Search Otomatis
+                const entriesSelect = document.getElementById('entriesSelect');
+                const manualEntriesInput = document.getElementById('manualEntriesInput');
+                const searchInput = document.getElementById('searchInput');
+                // Set value select dan input manual sesuai GET
+                (function(){
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if(urlParams.get('entries') === 'manual_input'){
+                        entriesSelect.value = 'manual_input';
+                        manualEntriesInput.style.display = '';
+                        manualEntriesInput.value = urlParams.get('manual_entries') || '';
+                    } else {
+                        entriesSelect.value = urlParams.get('entries') || '10';
+                        manualEntriesInput.style.display = 'none';
+                    }
+                })();
+                entriesSelect.addEventListener('change', function(){
+                    if(this.value === 'manual_input'){
+                        manualEntriesInput.style.display = '';
+                        manualEntriesInput.focus();
+                    } else {
+                        manualEntriesInput.style.display = 'none';
+                        document.getElementById('filterForm').submit();
+                    }
+                });
+                manualEntriesInput.addEventListener('input', function(){
+                    if(this.value && parseInt(this.value) > 0){
+                        document.getElementById('filterForm').submit();
+                    } else if(this.value === '' || parseInt(this.value) < 1) {
+                        // Jika kosong, kembali ke default 10
+                        entriesSelect.value = '10';
+                        manualEntriesInput.style.display = 'none';
+                        manualEntriesInput.value = '';
+                        // Hapus manual_entries dari URL dan submit dengan entries=10
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('entries', '10');
+                        url.searchParams.delete('manual_entries');
+                        url.searchParams.set('page', '1');
+                        window.location.href = url.toString();
+                    }
+                });
+                searchInput.addEventListener('input', function(){
+                    document.getElementById('filterForm').submit();
+                });
                 </script>
             </div>
         </div>
