@@ -20,7 +20,7 @@
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php" class="active"><i class="icon">✍️</i> Praktikan</a></li>
                 <li><a href="absensi_kehadiran.html"><i class="icon">✅</i> Absensi Kehadiran</a></li>
-                <li><a href="mata_praktikum.html"><i class="icon">📚</i> Mata Praktikum</a></li>
+                <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
@@ -279,6 +279,78 @@
                 searchInput.addEventListener('input', function(){
                     document.getElementById('filterForm').submit();
                 });
+                // Checkbox Select All
+                const selectAll = document.getElementById('select-all');
+                const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+                if (selectAll) {
+                    selectAll.addEventListener('change', function() {
+                        rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
+                    });
+                    rowCheckboxes.forEach(cb => {
+                        cb.addEventListener('change', function() {
+                            if (!cb.checked) {
+                                selectAll.checked = false;
+                            } else {
+                                if ([...rowCheckboxes].every(c => c.checked)) {
+                                    selectAll.checked = true;
+                                }
+                            }
+                        });
+                    });
+                }
+                // Button Edit
+                const btnEdit = document.querySelector('.btn-orange');
+                if (btnEdit) {
+                    btnEdit.addEventListener('click', function() {
+                        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+                        if (checkedBoxes.length === 0) {
+                            alert('Silakan pilih praktikan yang akan diedit terlebih dahulu!');
+                            return;
+                        }
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = 'edit_praktikan.php';
+                        checkedBoxes.forEach(checkbox => {
+                            const row = checkbox.closest('tr');
+                            const nim = row.cells[1].textContent;
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'selected_ids[]';
+                            input.value = nim;
+                            form.appendChild(input);
+                        });
+                        document.body.appendChild(form);
+                        form.submit();
+                    });
+                }
+                // Button Hapus
+                const btnHapus = document.querySelector('.btn-red');
+                if (btnHapus) {
+                    btnHapus.addEventListener('click', function() {
+                        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+                        if (checkedBoxes.length === 0) {
+                            alert('Silakan pilih praktikan yang akan dihapus terlebih dahulu!');
+                            return;
+                        }
+                        if (!confirm('Apakah Anda yakin ingin menghapus data yang dipilih?')) {
+                            return;
+                        }
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = 'delete_praktikan.php';
+                        checkedBoxes.forEach(checkbox => {
+                            const row = checkbox.closest('tr');
+                            const nim = row.cells[1].textContent;
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'selected_ids[]';
+                            input.value = nim;
+                            form.appendChild(input);
+                        });
+                        document.body.appendChild(form);
+                        form.submit();
+                    });
+                }
                 </script>
             </div>
         </div>

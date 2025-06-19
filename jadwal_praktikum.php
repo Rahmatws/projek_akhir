@@ -58,7 +58,7 @@ $result = $conn->query($sql);
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
                 <li><a href="absensi_kehadiran.html"><i class="icon">✅</i> Absensi Kehadiran</a></li>
-                <li><a href="mata_praktikum.html"><i class="icon">📚</i> Mata Praktikum</a></li>
+                <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
@@ -74,7 +74,7 @@ $result = $conn->query($sql);
             </div>
             <div class="schedule-actions" id="schedule-actions">
                 <button class="add-schedule-button">+ Tambah Jadwal Praktikum</button>
-                <button class="edit-schedule-button"><i class="icon">🗓️</i> Data Ubah Jadwal</button>
+                <button class="btn-purple" onclick="window.location.href='perubahan_jadwal.php'">Data Ubah Jadwal</button>
                 <button class="print-button"><i class="icon">🖨️</i> Cetak</button>
             </div>
 
@@ -87,37 +87,22 @@ $result = $conn->query($sql);
 
                     <div class="form-group">
                         <label for="nama_mata_kuliah">Nama Mata Kuliah</label>
-                        <select id="nama_mata_kuliah" name="nama_mata_kuliah" required>
-                            <option value="Praktikum Assembler">Praktikum Assembler</option>
-                            <option value="Pemodelan dan Simulasi">Pemodelan dan Simulasi</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="nama_mata_kuliah" name="nama_mata_kuliah" required placeholder="Nama Mata Kuliah">
                     </div>
 
                     <div class="form-group">
                         <label for="asisten_praktikum">Asisten Praktikum</label>
-                        <select id="asisten_praktikum" name="asisten_praktikum" required>
-                            <option value="Yusuf Muharam, S.Kom., MT.">Yusuf Muharam, S.Kom., MT.</option>
-                            <option value="Andhika-kun">Andhika-kun</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="asisten_praktikum" name="asisten_praktikum" required placeholder="Asisten Praktikum">
                     </div>
 
                     <div class="form-group">
                         <label for="ruang_lab">Ruang Lab</label>
-                        <select id="ruang_lab" name="ruang_lab" required>
-                            <option value="Lab 1">Lab 1</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="ruang_lab" name="ruang_lab" required placeholder="Ruang Lab">
                     </div>
 
                     <div class="form-group">
                         <label for="kelas">Kelas</label>
-                        <select id="kelas" name="kelas" required>
-                            <option value="IF Pagi 3">IF Pagi 3</option>
-                            <option value="4A">4A</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="kelas" name="kelas" required placeholder="Kelas">
                     </div>
 
                     <div class="form-group">
@@ -161,34 +146,19 @@ $result = $conn->query($sql);
                     </div>
                     <div class="form-group">
                         <label for="nama_mata_kuliah_edit">Nama Mata Kuliah</label>
-                        <select id="nama_mata_kuliah_edit" name="nama_mata_kuliah" required>
-                            <option value="Praktikum Assembler">Praktikum Assembler</option>
-                            <option value="Pemodelan dan Simulasi">Pemodelan dan Simulasi</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="nama_mata_kuliah_edit" name="nama_mata_kuliah" required placeholder="Nama Mata Kuliah">
                     </div>
                     <div class="form-group">
                         <label for="asisten_praktikum_edit">Asisten Praktikum</label>
-                        <select id="asisten_praktikum_edit" name="asisten_praktikum" required>
-                            <option value="Yusuf Muharam, S.Kom., MT.">Yusuf Muharam, S.Kom., MT.</option>
-                            <option value="Andhika-kun">Andhika-kun</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="asisten_praktikum_edit" name="asisten_praktikum" required placeholder="Asisten Praktikum">
                     </div>
                     <div class="form-group">
                         <label for="ruang_lab_edit">Ruang Lab</label>
-                        <select id="ruang_lab_edit" name="ruang_lab" required>
-                            <option value="Lab 1">Lab 1</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="ruang_lab_edit" name="ruang_lab" required placeholder="Ruang Lab">
                     </div>
                     <div class="form-group">
                         <label for="kelas_edit">Kelas</label>
-                        <select id="kelas_edit" name="kelas" required>
-                            <option value="IF Pagi 3">IF Pagi 3</option>
-                            <option value="4A">4A</option>
-                            <!-- More options here -->
-                        </select>
+                        <input type="text" id="kelas_edit" name="kelas" required placeholder="Kelas">
                     </div>
                     <div class="form-group">
                         <label>Hari</label>
@@ -297,48 +267,51 @@ $result = $conn->query($sql);
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        const addScheduleButton = document.querySelector('.add-schedule-button');
-        const addScheduleForm = document.querySelector('.add-schedule-form');
-        const editScheduleButton = document.querySelector('.edit-schedule-button');
-        const editScheduleForm = document.querySelector('.edit-schedule-form');
-        const mainContent = document.querySelector('.main-content');
-        const scheduleHeader = document.getElementById('schedule-header');
-        const scheduleHeaderTitle = scheduleHeader.querySelector('h2');
-        const scheduleActions = document.getElementById('schedule-actions');
-        const headerIcon = document.getElementById('header-icon');
+            const addScheduleButton = document.querySelector('.add-schedule-button');
+            const addScheduleForm = document.querySelector('.add-schedule-form');
+            const editScheduleButton = document.querySelector('.edit-schedule-button');
+            const editScheduleForm = document.querySelector('.edit-schedule-form');
+            const mainContent = document.querySelector('.main-content');
+            const scheduleHeader = document.getElementById('schedule-header');
+            const scheduleHeaderTitle = scheduleHeader ? scheduleHeader.querySelector('h2') : null;
+            const scheduleActions = document.getElementById('schedule-actions');
+            const headerIcon = document.getElementById('header-icon');
 
-        addScheduleButton.addEventListener('click', () => {
-            addScheduleForm.style.display = (addScheduleForm.style.display === 'none' || addScheduleForm.style.display === '') ? 'block' : 'none';
-            editScheduleForm.style.display = 'none';
-            mainContent.classList.remove('editing');
-            scheduleHeader.classList.remove('edit-mode');
-            if (addScheduleForm.style.display === 'block') {
-                mainContent.classList.add('adding');
-                scheduleHeader.classList.add('edit-mode');
-                scheduleHeaderTitle.innerHTML = '<span class="header-icon">➕</span>Tambah Jadwal Praktikum';
-            } else {
-                mainContent.classList.remove('adding');
-                scheduleHeader.classList.remove('edit-mode');
-                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+            if (addScheduleButton && addScheduleForm && scheduleHeader && scheduleHeaderTitle) {
+                addScheduleButton.addEventListener('click', () => {
+                    addScheduleForm.style.display = (addScheduleForm.style.display === 'none' || addScheduleForm.style.display === '') ? 'block' : 'none';
+                    if (editScheduleForm) editScheduleForm.style.display = 'none';
+                    mainContent.classList.remove('editing');
+                    scheduleHeader.classList.remove('edit-mode');
+                    if (addScheduleForm.style.display === 'block') {
+                        mainContent.classList.add('adding');
+                        scheduleHeader.classList.add('edit-mode');
+                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">➕</span>Tambah Jadwal Praktikum';
+                    } else {
+                        mainContent.classList.remove('adding');
+                        scheduleHeader.classList.remove('edit-mode');
+                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+                    }
+                });
             }
-        });
 
-            // Event listener for the main "Data Ubah Jadwal" button
-        editScheduleButton.addEventListener('click', () => {
-            editScheduleForm.style.display = (editScheduleForm.style.display === 'none' || editScheduleForm.style.display === '') ? 'block' : 'none';
-            addScheduleForm.style.display = 'none';
-            if (editScheduleForm.style.display === 'block') {
-                mainContent.classList.add('editing');
-                mainContent.classList.remove('adding');
-                scheduleHeader.classList.add('edit-mode');
-                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
-            } else {
-                mainContent.classList.remove('editing');
-                mainContent.classList.remove('adding');
-                scheduleHeader.classList.remove('edit-mode');
-                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
-                }
-            });
+            if (editScheduleButton && editScheduleForm && scheduleHeader && scheduleHeaderTitle) {
+                editScheduleButton.addEventListener('click', () => {
+                    editScheduleForm.style.display = (editScheduleForm.style.display === 'none' || editScheduleForm.style.display === '') ? 'block' : 'none';
+                    if (addScheduleForm) addScheduleForm.style.display = 'none';
+                    if (editScheduleForm.style.display === 'block') {
+                        mainContent.classList.add('editing');
+                        mainContent.classList.remove('adding');
+                        scheduleHeader.classList.add('edit-mode');
+                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
+                    } else {
+                        mainContent.classList.remove('editing');
+                        mainContent.classList.remove('adding');
+                        scheduleHeader.classList.remove('edit-mode');
+                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+                    }
+                });
+            }
 
             // Add event listener for delete buttons
             document.querySelectorAll('.delete-button').forEach(button => {
@@ -353,6 +326,7 @@ $result = $conn->query($sql);
             // Add event listener for edit buttons in the table
             document.querySelectorAll('.action-button.edit-button').forEach(button => {
                 button.addEventListener('click', function() {
+                    console.log('Tombol Edit diklik!'); // Debug
                     const id = this.dataset.id;
                     const row = this.closest('tr');
                     const tahunAjaran = row.children[1].textContent;
@@ -365,61 +339,29 @@ $result = $conn->query($sql);
                     const waktuMulai = waktu[0];
                     const waktuSelesai = waktu[1];
 
-                    // Populate the edit form fields
+                    // Populate the edit form fields (langsung ke input text)
                     document.getElementById('edit_id').value = id;
                     document.getElementById('tahun_ajaran_edit').value = tahunAjaran;
-
-                    const namaMatkulSelect = document.getElementById('nama_mata_kuliah_edit');
-                    for (let i = 0; i < namaMatkulSelect.options.length; i++) {
-                        if (namaMatkulSelect.options[i].value === namaMatkul) {
-                            namaMatkulSelect.selectedIndex = i;
-                            break;
-                        }
-                    }
-
-                    const asistenPraktikumSelect = document.getElementById('asisten_praktikum_edit');
-                    for (let i = 0; i < asistenPraktikumSelect.options.length; i++) {
-                        if (asistenPraktikumSelect.options[i].value === asistenPraktikum) {
-                            asistenPraktikumSelect.selectedIndex = i;
-                            break;
-                        }
-                    }
-
-                    const ruangLabSelect = document.getElementById('ruang_lab_edit');
-                    for (let i = 0; i < ruangLabSelect.options.length; i++) {
-                        if (ruangLabSelect.options[i].value === ruangLab) {
-                            ruangLabSelect.selectedIndex = i;
-                            break;
-                        }
-                    }
-
-                    const kelasSelect = document.getElementById('kelas_edit');
-                    for (let i = 0; i < kelasSelect.options.length; i++) {
-                        if (kelasSelect.options[i].value === kelas) {
-                            kelasSelect.selectedIndex = i;
-                            break;
-                        }
-                    }
+                    document.getElementById('nama_mata_kuliah_edit').value = namaMatkul;
+                    document.getElementById('asisten_praktikum_edit').value = asistenPraktikum;
+                    document.getElementById('ruang_lab_edit').value = ruangLab;
+                    document.getElementById('kelas_edit').value = kelas;
 
                     // Set radio button for Hari
                     document.querySelectorAll('input[name="hari"][id^="senin_edit"], input[name="hari"][id^="selasa_edit"], input[name="hari"][id^="rabu_edit"], input[name="hari"][id^="kamis_edit"], input[name="hari"][id^="jumat_edit"], input[name="hari"][id^="sabtu_edit"]').forEach(radio => {
-                        if (radio.value === hari) {
-                            radio.checked = true;
-                        } else {
-                            radio.checked = false;
-                        }
+                        radio.checked = (radio.value === hari);
                     });
 
                     document.getElementById('waktu_mulai_edit').value = waktuMulai;
                     document.getElementById('waktu_selesai_edit').value = waktuSelesai;
 
-                    // Display the edit form and hide others
-                    addScheduleForm.style.display = 'none';
-                    editScheduleForm.style.display = 'block';
-                    mainContent.classList.add('editing');
-                    mainContent.classList.remove('adding');
-                    scheduleHeader.classList.add('edit-mode');
-                    scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
+                    // Tampilkan form edit
+                    document.querySelector('.add-schedule-form').style.display = 'none';
+                    document.querySelector('.edit-schedule-form').style.display = 'block';
+                    document.querySelector('.main-content').classList.add('editing');
+                    document.querySelector('.main-content').classList.remove('adding');
+                    document.getElementById('schedule-header').classList.add('edit-mode');
+                    document.getElementById('schedule-header').querySelector('h2').innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
                 });
             });
 

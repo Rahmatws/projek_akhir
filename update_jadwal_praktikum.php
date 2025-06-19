@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hari = $conn->real_escape_string($_POST['hari']);
     $waktu_mulai = $conn->real_escape_string($_POST['waktu_mulai']);
     $waktu_selesai = $conn->real_escape_string($_POST['waktu_selesai']);
+    $waktu = $waktu_mulai . ' - ' . $waktu_selesai;
 
     // Query untuk mengupdate data di database
     $sql = "UPDATE jadwal_praktikum SET 
@@ -26,6 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             WHERE id = $id";
 
     if ($conn->query($sql) === TRUE) {
+        // Catat ke perubahan_jadwal
+        $petugas = isset($_SESSION['username']) ? $_SESSION['username'] : 'Petugas';
+        $tanggal_ubah = date('Y-m-d');
+        $sql2 = "INSERT INTO perubahan_jadwal (tanggal_ubah, petugas, askum, kelas, matkul, hari, waktu) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bind_param("sssssss", $tanggal_ubah, $petugas, $asisten_praktikum, $kelas, $nama_mata_kuliah, $hari, $waktu);
+        $stmt2->execute();
         // Jika berhasil, redirect kembali ke halaman daftar jadwal praktikum
         header("Location: jadwal_praktikum.php?status=success_update");
         exit();
