@@ -24,13 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($_POST['password'], $hashed_password) || $_POST['password'] === $hashed_password) {
             // Arahkan ke dashboard yang sesuai berdasarkan peran
             if ($role === "admin") {
-                header("Location: dashboard.html");
+                header("Location: dashboard.php");
                 exit();
             } elseif ($role === "kepala") {
-                header("Location: kepala_lab_dashboard.html");
+                header("Location: kepala_lab_dashboard.php");
                 exit();
             } elseif ($role === "laboran") {
-                header("Location: laboran_dashboard.html");
+                header("Location: laboran_dashboard.php");
                 exit();
             } else {
                 // Jika role tidak dikenali

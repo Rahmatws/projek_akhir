@@ -53,12 +53,12 @@
                 <h3>DAFTAR MENU PRAKTIKUM</h3>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="dashboard.html"><i class="icon">🏠</i> Dashboard</a></li>
+                <li><a href="dashboard.php"><i class="icon">🏠</i> Dashboard</a></li>
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.html"><i class="icon">✅</i> Absensi Kehadiran</a></li>
-                <li><a href="mata_praktikum.html"><i class="icon">📚</i> Mata Praktikum</a></li>
+                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php" class="active"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
@@ -120,7 +120,7 @@
                                     echo "<td>" . htmlspecialchars($row["nama_asisten"]) . "</td>";
                                     echo "<td>" . htmlspecialchars($row["nama_prodi"]) . "</td>";
                                     echo "<td>";
-                                    echo "<button class=\"action-button view-button\">📊</button>";
+                                    echo "<a href='absensi_kehadiran_asisten.php?id_asisten=" . $row["id"] . "' class='action-button view-button' title='Lihat Absensi'>📊</a>";
                                     echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
                                     echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
                                     echo "</td>";
