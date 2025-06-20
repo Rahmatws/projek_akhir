@@ -126,7 +126,7 @@
                                     echo "<td>" . htmlspecialchars($row["semester"]) . "</td>";
                                     echo "<td>";
                                     echo "<div class=\"action-buttons-wrapper\">";
-                                    echo "<button class=\"action-button view-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📊</button>";
+                                    echo "<a href='detail_kelas.php?id=" . $row["id"] . "' class='action-button view-button' title='Detail Kelas'>📊</a>";
                                     echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
                                     echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
                                     echo "</div>";

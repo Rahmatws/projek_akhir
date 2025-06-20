@@ -14,6 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $waktu_selesai = $conn->real_escape_string($_POST['waktu_selesai']);
     $waktu = $waktu_mulai . ' - ' . $waktu_selesai;
 
+    // Cek bentrok jadwal (ruang, laboran, atau kelas pada hari dan waktu yang sama, kecuali id yang sedang diedit)
+    $sql_bentrok = "SELECT * FROM jadwal_praktikum WHERE id != '$id' AND hari = '$hari' AND ((ruang_lab = '$ruang_lab') OR (asisten_praktikum = '$asisten_praktikum') OR (kelas = '$kelas')) AND ((waktu_mulai < '$waktu_selesai' AND waktu_selesai > '$waktu_mulai'))";
+    $result_bentrok = $conn->query($sql_bentrok);
+    if ($result_bentrok && $result_bentrok->num_rows > 0) {
+        // Jadwal bentrok
+        echo "<script>alert('Jadwal bentrok! Ruang, laboran, atau kelas sudah terpakai pada hari dan jam tersebut.'); window.location.href='jadwal_praktikum.php?status=bentrok';</script>";
+        $conn->close();
+        exit();
+    }
+
     // Query untuk mengupdate data di database
     $sql = "UPDATE jadwal_praktikum SET 
             tahun_ajaran = '$tahun_ajaran',

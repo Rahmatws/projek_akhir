@@ -265,6 +265,65 @@ $result = $conn->query($sql);
         </div>
     </div>
 
+    <!-- AREA CETAK KHUSUS PRINT -->
+    <div id="print-area" class="print-area">
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="unibba-logo.png" alt="Logo Unibba" style="height: 60px; margin-right: 16px;">
+            <div style="flex:1; text-align: center;">
+                <div style="font-size: 1.2em; font-weight: bold;">DAFTAR JADWAL PRAKTIKUM</div>
+                <div style="font-size: 1.1em;">Fakultas Teknologi Informasi Universitas Bale Bandung</div>
+            </div>
+        </div>
+        <table border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse; font-size:0.95em;">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>No</th>
+                    <th>Tahun</th>
+                    <th>Matkum</th>
+                    <th>Asisten Praktikum</th>
+                    <th>Ruangan</th>
+                    <th>Kelas</th>
+                    <th>Hari</th>
+                    <th>Waktu</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Query ulang tanpa limit agar semua data tampil saat print
+                $sql_print = "SELECT tahun_ajaran, nama_mata_kuliah, asisten_praktikum, ruang_lab, kelas, hari, waktu_mulai, waktu_selesai FROM jadwal_praktikum" . $where_clause . " ORDER BY id ASC";
+                $result_print = $conn->query($sql_print);
+                if ($result_print && $result_print->num_rows > 0) {
+                    $no = 1;
+                    while($row = $result_print->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $no++ . "</td>";
+                        echo "<td>" . htmlspecialchars($row["tahun_ajaran"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["nama_mata_kuliah"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["asisten_praktikum"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["ruang_lab"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["kelas"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["hari"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["waktu_mulai"]) . " - " . htmlspecialchars($row["waktu_selesai"]) . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='8' style='text-align:center;'>Tidak ada data jadwal praktikum</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+    <style>
+    .print-area { display: none; }
+    @media print {
+        body, html { background: #fff !important; }
+        .dashboard-container, .main-content, .sidebar, .page-title-bar, .schedule-header, .schedule-actions, .data-table, .add-schedule-form, .edit-schedule-form, .table-footer, .pagination, .search-box, .btn, button, .action-buttons-wrapper, .table-info-text { display: none !important; }
+        .print-area { display: block !important; margin: 0; padding: 0; }
+        .print-area table { page-break-inside: auto; }
+        .print-area th, .print-area td { font-size: 1em; }
+    }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const addScheduleButton = document.querySelector('.add-schedule-button');

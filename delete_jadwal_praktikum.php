@@ -1,5 +1,12 @@
 <?php
+session_start();
 require_once 'db_connect.php'; // Sertakan file koneksi database
+
+// Cek role user
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin','laboran','kepala'])) {
+    header('Location: index.html?error=unauthorized');
+    exit();
+}
 
 if (isset($_GET['id'])) {
     $id = $conn->real_escape_string($_GET['id']);

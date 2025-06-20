@@ -114,12 +114,14 @@
                                 if ($result && $result->num_rows > 0) {
                                     $no = $offset + 1;
                                     while($row = $result->fetch_assoc()) {
+                                        $tgl = $row['tgl_lahir'];
+                                        $tgl_display = ($tgl && $tgl !== '0000-00-00' && $tgl !== '1970-01-01') ? date('d-m-Y', strtotime($tgl)) : '-';
                                         echo "<tr>
                                             <td>" . $no . "</td>
                                             <td>" . htmlspecialchars($row['nim']) . "</td>
                                             <td>" . htmlspecialchars($row['nama_lengkap']) . "</td>
                                             <td>" . htmlspecialchars($row['alamat']) . "</td>
-                                            <td>" . date('d-m-Y', strtotime($row['tgl_lahir'])) . "</td>
+                                            <td>" . $tgl_display . "</td>
                                             <td>" . htmlspecialchars($row['prodi']) . "</td>
                                             <td><input type='checkbox' class='row-checkbox'></td>
                                         </tr>";
@@ -355,5 +357,72 @@
             </div>
         </div>
     </div>
+    <!-- AREA CETAK KHUSUS PRINT -->
+    <div id="print-area" class="print-area">
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="unibba-logo.png" alt="Logo Unibba" style="height: 60px; margin-right: 16px;">
+            <div style="flex:1; text-align: center;">
+                <div style="font-size: 1.2em; font-weight: bold;">DAFTAR PRAKTIKAN</div>
+                <div style="font-size: 1.1em;">Fakultas Teknologi Informasi Universitas Bale Bandung</div>
+            </div>
+        </div>
+        <table border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse; font-size:0.95em;">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>No</th>
+                    <th>NIM</th>
+                    <th>Nama Lengkap</th>
+                    <th>Alamat</th>
+                    <th>Tgl Lahir</th>
+                    <th>Prodi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                include 'db_connect.php';
+                $search_query = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+                $where_clause = '';
+                if (!empty($search_query)) {
+                    $where_clause = " WHERE nim LIKE '%$search_query%' OR nama_lengkap LIKE '%$search_query%' OR alamat LIKE '%$search_query%' OR prodi LIKE '%$search_query%'";
+                }
+                $sql_print = "SELECT * FROM praktikan" . $where_clause . " ORDER BY nim ASC";
+                $result_print = $conn->query($sql_print);
+                if ($result_print && $result_print->num_rows > 0) {
+                    $no = 1;
+                    while($row = $result_print->fetch_assoc()) {
+                        $tgl = $row['tgl_lahir'];
+                        $tgl_display = ($tgl && $tgl !== '0000-00-00' && $tgl !== '1970-01-01') ? date('d-m-Y', strtotime($tgl)) : '-';
+                        echo "<tr>";
+                        echo "<td>" . $no++ . "</td>";
+                        echo "<td>" . htmlspecialchars($row['nim']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['nama_lengkap']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
+                        echo "<td>" . $tgl_display . "</td>";
+                        echo "<td>" . htmlspecialchars($row['prodi']) . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6' style='text-align:center;'>Tidak ada data praktikan</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+    <style>
+    .print-area { display: none; }
+    @media print {
+        body, html { background: #fff !important; }
+        .dashboard-container, .main-content, .sidebar, .top-bar, .praktikan-box, .praktikan-header-bar, .praktikan-actions-bar, .praktikan-table-section, .praktikan-table-controls, .praktikan-table-wrapper, .praktikan-pagination, .search-box, .btn, button, .table-info-text, .breadcrumb, .user-info, .praktikan-add-section { display: none !important; }
+        .print-area { display: block !important; margin: 0; padding: 0; }
+        .print-area table { page-break-inside: auto; }
+        .print-area th, .print-area td { font-size: 1em; }
+    }
+    </style>
+    <script>
+    // ... existing code ...
+    // Pastikan tombol Cetak memanggil window.print()
+    document.querySelector('.btn-purple').onclick = function() { window.print(); };
+    // ... existing code ...
+    </script>
 </body>
 </html> 

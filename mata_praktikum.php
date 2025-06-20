@@ -191,22 +191,23 @@ $result = $conn->query($sql);
                     <h2><span class="header-icon">📝</span> Edit Mata Praktikum</h2>
                 </div>
                 <div class="form-content">
-                    <form action="#" method="POST">
+                    <form id="edit-matkum-form" action="update_mata_praktikum.php" method="POST">
+                        <input type="hidden" id="kode_lama" name="kode_lama" value="">
                         <div class="form-group">
                             <label for="edit_kode_matkul">Kode Mata Praktikum</label>
-                            <input type="text" id="edit_kode_matkul" name="edit_kode_matkul" placeholder="Kode Mata Praktikum" value="FTI001">
+                            <input type="text" id="edit_kode_matkul" name="edit_kode_matkul" placeholder="Kode Mata Praktikum" value="">
                         </div>
                         <div class="form-group">
                             <label for="edit_nama_matkul">Nama Mata Praktikum</label>
-                            <input type="text" id="edit_nama_matkul" name="edit_nama_matkul" placeholder="Nama Mata Praktikum" value="Praktikum Pro Model Mantap">
+                            <input type="text" id="edit_nama_matkul" name="edit_nama_matkul" placeholder="Nama Mata Praktikum" value="">
                         </div>
                         <div class="form-group">
                             <label for="edit_sks">SKS</label>
-                            <input type="number" id="edit_sks" name="edit_sks" placeholder="SKS" value="2">
+                            <input type="number" id="edit_sks" name="edit_sks" placeholder="SKS" value="">
                         </div>
                         <div class="form-group">
                             <label for="edit_semester">Semester</label>
-                            <input type="number" id="edit_semester" name="edit_semester" placeholder="Semester" value="5">
+                            <input type="number" id="edit_semester" name="edit_semester" placeholder="Semester" value="">
                         </div>
                         <div class="form-group">
                             <div class="form-buttons-wrapper">
@@ -270,6 +271,7 @@ $result = $conn->query($sql);
             const editNama = document.getElementById('edit_nama_matkul');
             const editSks = document.getElementById('edit_sks');
             const editSemester = document.getElementById('edit_semester');
+            const kodeLamaInput = document.getElementById('kode_lama');
             let kodeLama = '';
             if (tableBody) {
                 tableBody.addEventListener('click', function(e) {
@@ -285,6 +287,7 @@ $result = $conn->query($sql);
                         editSks.value = sks;
                         editSemester.value = semester;
                         kodeLama = kode;
+                        kodeLamaInput.value = kode;
                         mataPraktikumListContainer.style.display = 'none';
                         mataPraktikumAddFormContainer.style.display = 'none';
                         mataPraktikumEditFormContainer.style.display = 'block';

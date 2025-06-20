@@ -7,36 +7,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Melindungi dari SQL injection (meskipun untuk latihan ini kita tidak pakai prepared statements dulu)
+    // Melindungi dari SQL injection
     $username = $conn->real_escape_string($username);
     $password = $conn->real_escape_string($password);
 
-    // Query untuk mencari user di database
-    $sql = "SELECT role FROM users WHERE username = '$username' AND password = '$password'";
+    // Query untuk mencari user di database (ambil hash password dan role)
+    $sql = "SELECT password, role FROM users WHERE username = '$username'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        // User ditemukan, ambil peran (role)
         $row = $result->fetch_assoc();
+        $hashed_password = $row['password'];
         $role = $row['role'];
 
-        // Arahkan ke dashboard yang sesuai berdasarkan peran
-        if ($role === "admin") {
-            header("Location: dashboard.html");
-            exit();
-        } elseif ($role === "kepala") {
-            header("Location: kepala_lab_dashboard.html");
-            exit();
-        } elseif ($role === "laboran") {
-            header("Location: laboran_dashboard.html");
-            exit();
+        // Verifikasi password: hash (baru) atau plaintext (lama)
+        if (password_verify($_POST['password'], $hashed_password) || $_POST['password'] === $hashed_password) {
+            // Arahkan ke dashboard yang sesuai berdasarkan peran
+            if ($role === "admin") {
+                header("Location: dashboard.html");
+                exit();
+            } elseif ($role === "kepala") {
+                header("Location: kepala_lab_dashboard.html");
+                exit();
+            } elseif ($role === "laboran") {
+                header("Location: laboran_dashboard.html");
+                exit();
+            } else {
+                // Jika role tidak dikenali
+                header("Location: index.html?error=unknown_role");
+                exit();
+            }
         } else {
-            // Jika role tidak dikenali (ini seharusnya tidak terjadi jika data database benar)
-            header("Location: index.html?error=unknown_role");
+            // Password salah
+            header("Location: index.html?error=invalid_credentials");
             exit();
         }
     } else {
-        // User tidak ditemukan atau password salah
+        // User tidak ditemukan
         header("Location: index.html?error=invalid_credentials");
         exit();
     }

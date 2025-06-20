@@ -196,5 +196,68 @@
             </div>
         </div>
     </div>
+    <!-- AREA CETAK KHUSUS PRINT -->
+    <div id="print-area" class="print-area">
+        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <img src="unibba-logo.png" alt="Logo Unibba" style="height: 60px; margin-right: 16px;">
+            <div style="flex:1; text-align: center;">
+                <div style="font-size: 1.2em; font-weight: bold;">DATA PERUBAHAN JADWAL PRAKTIKUM</div>
+                <div style="font-size: 1.1em;">Fakultas Teknologi Informasi Universitas Bale Bandung</div>
+            </div>
+        </div>
+        <table border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse; font-size:0.95em;">
+            <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>No</th>
+                    <th>Tanggal Ubah</th>
+                    <th>Petugas</th>
+                    <th>Askum</th>
+                    <th>Kelas</th>
+                    <th>Matkul</th>
+                    <th>Hari</th>
+                    <th>Waktu</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                include 'db_connect.php';
+                $search_query = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+                $where_clause = '';
+                if (!empty($search_query)) {
+                    $where_clause = " WHERE petugas LIKE '%$search_query%' OR askum LIKE '%$search_query%' OR kelas LIKE '%$search_query%' OR matkul LIKE '%$search_query%' OR hari LIKE '%$search_query%' OR waktu LIKE '%$search_query%'";
+                }
+                $sql_print = "SELECT * FROM perubahan_jadwal" . $where_clause . " ORDER BY tanggal_ubah DESC, id DESC";
+                $result_print = $conn->query($sql_print);
+                if ($result_print && $result_print->num_rows > 0) {
+                    $no = 1;
+                    while($row = $result_print->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $no++ . "</td>";
+                        echo "<td>" . htmlspecialchars(date('d-m-Y', strtotime($row['tanggal_ubah']))) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['petugas']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['askum']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['kelas']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['matkul']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['hari']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['waktu']) . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='8' style='text-align:center;'>Tidak ada data perubahan jadwal</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+    <style>
+    .print-area { display: none; }
+    @media print {
+        body, html { background: #fff !important; }
+        .dashboard-container, .main-content, .sidebar, .top-bar, .jadwal-box, .jadwal-header-bar, .jadwal-actions-bar, .jadwal-table-section, .jadwal-table-controls, .jadwal-table-wrapper, .jadwal-pagination, .search-box, .btn, button, .table-info-text, .breadcrumb, .user-info { display: none !important; }
+        .print-area { display: block !important; margin: 0; padding: 0; }
+        .print-area table { page-break-inside: auto; }
+        .print-area th, .print-area td { font-size: 1em; }
+    }
+    </style>
 </body>
 </html> 

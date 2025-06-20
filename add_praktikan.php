@@ -18,6 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 throw new Exception("Semua field harus diisi!");
             }
             
+            // Konversi tgl_lahir ke format YYYY-MM-DD jika perlu
+            $date = str_replace('/', '-', $birth_dates[$i]);
+            if (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $date, $matches)) {
+                $birth_dates[$i] = $matches[3] . '-' . $matches[2] . '-' . $matches[1];
+            }
+            
             // Cek apakah NIM sudah ada
             $check_sql = "SELECT nim FROM praktikan WHERE nim = ?";
             $check_stmt = $conn->prepare($check_sql);
