@@ -2,17 +2,23 @@
 require_once 'db_connect.php'; // Sertakan file koneksi database
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form dan sanitasi
-    $id = $conn->real_escape_string($_POST['id']);
-    $tahun_ajaran = $conn->real_escape_string($_POST['tahun_ajaran']);
-    $nama_mata_kuliah = $conn->real_escape_string($_POST['nama_mata_kuliah']);
-    $asisten_praktikum = $conn->real_escape_string($_POST['asisten_praktikum']);
-    $ruang_lab = $conn->real_escape_string($_POST['ruang_lab']);
-    $kelas = $conn->real_escape_string($_POST['kelas']);
-    $hari = $conn->real_escape_string($_POST['hari']);
-    $waktu_mulai = $conn->real_escape_string($_POST['waktu_mulai']);
-    $waktu_selesai = $conn->real_escape_string($_POST['waktu_selesai']);
+    // Ambil semua data dari form
+    $id = $_POST['id'];
+    $tahun_ajaran = $_POST['tahun_ajaran'];
+    $nama_mata_kuliah = $_POST['nama_mata_kuliah'];
+    $asisten_praktikum = $_POST['asisten_praktikum'];
+    $ruang_lab = $_POST['ruang_lab'];
+    $kelas = $_POST['kelas'];
+    $semester = $_POST['semester']; // Data semester baru
+    $hari = $_POST['hari'];
+    $waktu_mulai = $_POST['waktu_mulai'];
+    $waktu_selesai = $_POST['waktu_selesai'];
     $waktu = $waktu_mulai . ' - ' . $waktu_selesai;
+
+    // Validasi sederhana
+    if (empty($id) || empty($semester)) {
+        die("Error: ID atau Semester tidak boleh kosong.");
+    }
 
     // Cek bentrok jadwal (ruang, laboran, atau kelas pada hari dan waktu yang sama, kecuali id yang sedang diedit)
     $sql_bentrok = "SELECT * FROM jadwal_praktikum WHERE id != '$id' AND hari = '$hari' AND ((ruang_lab = '$ruang_lab') OR (asisten_praktikum = '$asisten_praktikum') OR (kelas = '$kelas')) AND ((waktu_mulai < '$waktu_selesai' AND waktu_selesai > '$waktu_mulai'))";
@@ -24,19 +30,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Query untuk mengupdate data di database
+    // Query untuk update data
     $sql = "UPDATE jadwal_praktikum SET 
-            tahun_ajaran = '$tahun_ajaran',
-            nama_mata_kuliah = '$nama_mata_kuliah',
-            asisten_praktikum = '$asisten_praktikum',
-            ruang_lab = '$ruang_lab',
-            kelas = '$kelas',
-            hari = '$hari',
-            waktu_mulai = '$waktu_mulai',
-            waktu_selesai = '$waktu_selesai'
-            WHERE id = $id";
+                tahun_ajaran = ?, 
+                nama_mata_kuliah = ?, 
+                asisten_praktikum = ?, 
+                ruang_lab = ?, 
+                kelas = ?, 
+                semester = ?, 
+                hari = ?, 
+                waktu_mulai = ?, 
+                waktu_selesai = ? 
+            WHERE id = ?";
+            
+    $stmt = $conn->prepare($sql);
+    // Tipe data: s=string, i=integer. Total 10 parameter (9 untuk set, 1 untuk where).
+    $stmt->bind_param("sssssisssi", $tahun_ajaran, $nama_mata_kuliah, $asisten_praktikum, $ruang_lab, $kelas, $semester, $hari, $waktu_mulai, $waktu_selesai, $id);
 
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute()) {
         // Catat ke perubahan_jadwal
         $petugas = isset($_SESSION['username']) ? $_SESSION['username'] : 'Petugas';
         $tanggal_ubah = date('Y-m-d');
@@ -44,14 +55,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt2 = $conn->prepare($sql2);
         $stmt2->bind_param("sssssss", $tanggal_ubah, $petugas, $asisten_praktikum, $kelas, $nama_mata_kuliah, $hari, $waktu);
         $stmt2->execute();
-        // Jika berhasil, redirect kembali ke halaman daftar jadwal praktikum
-        header("Location: jadwal_praktikum.php?status=success_update");
+        // Redirect kembali ke halaman daftar setelah berhasil
+        header("location: jadwal_praktikum.php?status=updated");
         exit();
     } else {
-        // Jika gagal, tampilkan error
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $stmt->error;
     }
+    $stmt->close();
+    $conn->close();
 }
-
-$conn->close(); // Tutup koneksi database
 ?> 

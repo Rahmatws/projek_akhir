@@ -1,6 +1,17 @@
 <?php
 require_once 'db_connect.php'; // Sertakan file koneksi database
 
+// --- Data Fetching for Dropdowns ---
+// 1. Mata Praktikum
+$mata_praktikum_list = $conn->query("SELECT nama_matkul FROM mata_praktikum ORDER BY nama_matkul ASC")->fetch_all(MYSQLI_ASSOC);
+// 2. Asisten Praktikum
+$asisten_list = $conn->query("SELECT nama_asisten FROM asisten_praktikum ORDER BY nama_asisten ASC")->fetch_all(MYSQLI_ASSOC);
+// 3. Ruang Laboratorium
+$ruang_lab_list = $conn->query("SELECT nama_ruang FROM ruang_laboratorium ORDER BY nama_ruang ASC")->fetch_all(MYSQLI_ASSOC);
+// 4. Kelas
+$kelas_list = $conn->query("SELECT id, nama_kelas, semester FROM kelas ORDER BY nama_kelas, semester ASC")->fetch_all(MYSQLI_ASSOC);
+
+
 // --- Pagination Logic (Adapted for jadwal_praktikum) --- 
 $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10; // Jumlah entri per halaman
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Halaman saat ini
@@ -32,7 +43,7 @@ if ($current_page > $total_pages && $total_pages > 0) {
 }
 
 // Query untuk mendapatkan data jadwal praktikum (dengan pencarian dan pagination)
-$sql = "SELECT id, tahun_ajaran, nama_mata_kuliah, asisten_praktikum, ruang_lab, kelas, hari, waktu_mulai, waktu_selesai FROM jadwal_praktikum" . $where_clause . " ORDER BY id ASC LIMIT $limit_per_page OFFSET $offset";
+$sql = "SELECT id, tahun_ajaran, nama_mata_kuliah, asisten_praktikum, ruang_lab, kelas, semester, hari, waktu_mulai, waktu_selesai FROM jadwal_praktikum" . $where_clause . " ORDER BY id ASC LIMIT $limit_per_page OFFSET $offset";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -57,10 +68,10 @@ $result = $conn->query($sql);
                 <li><a href="jadwal_praktikum.php" class="active"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
-                <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
+                <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
             </ul>
         </div>
@@ -87,22 +98,49 @@ $result = $conn->query($sql);
 
                     <div class="form-group">
                         <label for="nama_mata_kuliah">Nama Mata Kuliah</label>
-                        <input type="text" id="nama_mata_kuliah" name="nama_mata_kuliah" required placeholder="Nama Mata Kuliah">
+                        <select id="nama_mata_kuliah" name="nama_mata_kuliah" required>
+                            <option value="">Pilih Mata Kuliah</option>
+                            <?php foreach ($mata_praktikum_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_matkul']); ?>"><?php echo htmlspecialchars($item['nama_matkul']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="asisten_praktikum">Asisten Praktikum</label>
-                        <input type="text" id="asisten_praktikum" name="asisten_praktikum" required placeholder="Asisten Praktikum">
+                        <select id="asisten_praktikum" name="asisten_praktikum" required>
+                            <option value="">Pilih Asisten Praktikum</option>
+                            <?php foreach ($asisten_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_asisten']); ?>"><?php echo htmlspecialchars($item['nama_asisten']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="ruang_lab">Ruang Lab</label>
-                        <input type="text" id="ruang_lab" name="ruang_lab" required placeholder="Ruang Lab">
+                        <select id="ruang_lab" name="ruang_lab" required>
+                            <option value="">Pilih Ruang Lab</option>
+                            <?php foreach ($ruang_lab_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_ruang']); ?>"><?php echo htmlspecialchars($item['nama_ruang']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label for="kelas">Kelas</label>
-                        <input type="text" id="kelas" name="kelas" required placeholder="Kelas">
+                         <select id="kelas" name="kelas" required>
+                            <option value="" data-semester="">Pilih Kelas</option>
+                            <?php foreach ($kelas_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_kelas']); ?>" data-semester="<?php echo htmlspecialchars($item['semester']); ?>">
+                                    <?php echo htmlspecialchars($item['nama_kelas']) . ' (Semester ' . htmlspecialchars($item['semester']) . ')'; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="semester">Semester</label>
+                        <input type="text" id="semester" name="semester" placeholder="Pilih kelas untuk mengisi semester" readonly required>
                     </div>
 
                     <div class="form-group">
@@ -146,19 +184,45 @@ $result = $conn->query($sql);
                     </div>
                     <div class="form-group">
                         <label for="nama_mata_kuliah_edit">Nama Mata Kuliah</label>
-                        <input type="text" id="nama_mata_kuliah_edit" name="nama_mata_kuliah" required placeholder="Nama Mata Kuliah">
+                        <select id="nama_mata_kuliah_edit" name="nama_mata_kuliah" required>
+                            <option value="">Pilih Mata Kuliah</option>
+                            <?php foreach ($mata_praktikum_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_matkul']); ?>"><?php echo htmlspecialchars($item['nama_matkul']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="asisten_praktikum_edit">Asisten Praktikum</label>
-                        <input type="text" id="asisten_praktikum_edit" name="asisten_praktikum" required placeholder="Asisten Praktikum">
+                         <select id="asisten_praktikum_edit" name="asisten_praktikum" required>
+                            <option value="">Pilih Asisten Praktikum</option>
+                            <?php foreach ($asisten_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_asisten']); ?>"><?php echo htmlspecialchars($item['nama_asisten']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="ruang_lab_edit">Ruang Lab</label>
-                        <input type="text" id="ruang_lab_edit" name="ruang_lab" required placeholder="Ruang Lab">
+                        <select id="ruang_lab_edit" name="ruang_lab" required>
+                            <option value="">Pilih Ruang Lab</option>
+                             <?php foreach ($ruang_lab_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_ruang']); ?>"><?php echo htmlspecialchars($item['nama_ruang']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="kelas_edit">Kelas</label>
-                        <input type="text" id="kelas_edit" name="kelas" required placeholder="Kelas">
+                        <select id="kelas_edit" name="kelas" required>
+                            <option value="" data-semester="">Pilih Kelas</option>
+                             <?php foreach ($kelas_list as $item): ?>
+                                <option value="<?php echo htmlspecialchars($item['nama_kelas']); ?>" data-semester="<?php echo htmlspecialchars($item['semester']); ?>">
+                                    <?php echo htmlspecialchars($item['nama_kelas']) . ' (Semester ' . htmlspecialchars($item['semester']) . ')'; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                     <div class="form-group">
+                        <label for="semester_edit">Semester</label>
+                        <input type="text" id="semester_edit" name="semester" placeholder="Pilih kelas untuk mengisi semester" readonly required>
                     </div>
                     <div class="form-group">
                         <label>Hari</label>
@@ -237,8 +301,18 @@ $result = $conn->query($sql);
                                 echo "<td>" . htmlspecialchars($row["waktu_mulai"]) . " - " . htmlspecialchars($row["waktu_selesai"]) . "</td>";
                                 echo "<td>";
                                 echo "<div class=\"action-buttons-wrapper\">";
-                                echo "<button class=\"action-button view-button\">📊</button>";
-                                echo "<button class=\"action-button edit-button\" data-id=\"" . $row["id"] . "\">📝</button>";
+                                echo "<a href=\"absensi_kehadiran.php?id_jadwal=" . $row["id"] . "\" class=\"action-button view-button\" title=\"Input Absensi Kehadiran\">📊</a>";
+                                echo "<button class=\"action-button edit-button\" 
+                                        data-id=\"" . $row["id"] . "\"
+                                        data-tahun_ajaran=\"" . htmlspecialchars($row["tahun_ajaran"]) . "\"
+                                        data-nama_mata_kuliah=\"" . htmlspecialchars($row["nama_mata_kuliah"]) . "\"
+                                        data-asisten_praktikum=\"" . htmlspecialchars($row["asisten_praktikum"]) . "\"
+                                        data-ruang_lab=\"" . htmlspecialchars($row["ruang_lab"]) . "\"
+                                        data-kelas=\"" . htmlspecialchars($row["kelas"]) . "\"
+                                        data-semester=\"" . htmlspecialchars($row["semester"] ?? '') . "\"
+                                        data-hari=\"" . htmlspecialchars($row["hari"]) . "\"
+                                        data-waktu_mulai=\"" . htmlspecialchars($row["waktu_mulai"]) . "\"
+                                        data-waktu_selesai=\"" . htmlspecialchars($row["waktu_selesai"]) . "\">📝</button>";
                                 echo "<button class=\"action-button delete-button\" data-id=\"" . $row["id"] . "\">🗑️</button>";
                                 echo "</div>";
                                 echo "</td>";
@@ -326,109 +400,111 @@ $result = $conn->query($sql);
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const addScheduleButton = document.querySelector('.add-schedule-button');
-            const addScheduleForm = document.querySelector('.add-schedule-form');
-            const editScheduleButton = document.querySelector('.edit-schedule-button');
-            const editScheduleForm = document.querySelector('.edit-schedule-form');
-            const mainContent = document.querySelector('.main-content');
-            const scheduleHeader = document.getElementById('schedule-header');
+        const addScheduleButton = document.querySelector('.add-schedule-button');
+        const addScheduleForm = document.querySelector('.add-schedule-form');
+        const editScheduleButton = document.querySelector('.edit-schedule-button');
+        const editScheduleForm = document.querySelector('.edit-schedule-form');
+        const mainContent = document.querySelector('.main-content');
+        const scheduleHeader = document.getElementById('schedule-header');
             const scheduleHeaderTitle = scheduleHeader ? scheduleHeader.querySelector('h2') : null;
-            const scheduleActions = document.getElementById('schedule-actions');
-            const headerIcon = document.getElementById('header-icon');
+        const scheduleActions = document.getElementById('schedule-actions');
+        const headerIcon = document.getElementById('header-icon');
 
             if (addScheduleButton && addScheduleForm && scheduleHeader && scheduleHeaderTitle) {
-                addScheduleButton.addEventListener('click', () => {
-                    addScheduleForm.style.display = (addScheduleForm.style.display === 'none' || addScheduleForm.style.display === '') ? 'block' : 'none';
+        addScheduleButton.addEventListener('click', () => {
+            addScheduleForm.style.display = (addScheduleForm.style.display === 'none' || addScheduleForm.style.display === '') ? 'block' : 'none';
                     if (editScheduleForm) editScheduleForm.style.display = 'none';
-                    mainContent.classList.remove('editing');
-                    scheduleHeader.classList.remove('edit-mode');
-                    if (addScheduleForm.style.display === 'block') {
-                        mainContent.classList.add('adding');
-                        scheduleHeader.classList.add('edit-mode');
-                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">➕</span>Tambah Jadwal Praktikum';
-                    } else {
-                        mainContent.classList.remove('adding');
-                        scheduleHeader.classList.remove('edit-mode');
-                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
-                    }
-                });
+            mainContent.classList.remove('editing');
+            scheduleHeader.classList.remove('edit-mode');
+            if (addScheduleForm.style.display === 'block') {
+                mainContent.classList.add('adding');
+                scheduleHeader.classList.add('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">➕</span>Tambah Jadwal Praktikum';
+            } else {
+                mainContent.classList.remove('adding');
+                scheduleHeader.classList.remove('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+            }
+        });
             }
 
             if (editScheduleButton && editScheduleForm && scheduleHeader && scheduleHeaderTitle) {
-                editScheduleButton.addEventListener('click', () => {
-                    editScheduleForm.style.display = (editScheduleForm.style.display === 'none' || editScheduleForm.style.display === '') ? 'block' : 'none';
+        editScheduleButton.addEventListener('click', () => {
+            editScheduleForm.style.display = (editScheduleForm.style.display === 'none' || editScheduleForm.style.display === '') ? 'block' : 'none';
                     if (addScheduleForm) addScheduleForm.style.display = 'none';
-                    if (editScheduleForm.style.display === 'block') {
-                        mainContent.classList.add('editing');
-                        mainContent.classList.remove('adding');
-                        scheduleHeader.classList.add('edit-mode');
-                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
-                    } else {
-                        mainContent.classList.remove('editing');
-                        mainContent.classList.remove('adding');
-                        scheduleHeader.classList.remove('edit-mode');
-                        scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
-                    }
-                });
+            if (editScheduleForm.style.display === 'block') {
+                mainContent.classList.add('editing');
+                mainContent.classList.remove('adding');
+                scheduleHeader.classList.add('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
+            } else {
+                mainContent.classList.remove('editing');
+                mainContent.classList.remove('adding');
+                scheduleHeader.classList.remove('edit-mode');
+                scheduleHeaderTitle.innerHTML = '<span class="header-icon">📋</span>Daftar Jadwal Praktikum';
+                }
+            });
             }
 
-            // Add event listener for delete buttons
+            // --- Logika untuk Tombol Hapus ---
             document.querySelectorAll('.delete-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const id = this.dataset.id;
-                    if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                        window.location.href = 'delete_jadwal_praktikum.php?id=' + id;
+                    const confirmation = confirm('Apakah Anda yakin ingin menghapus data jadwal ini?');
+
+                    if (confirmation) {
+                        // Buat form sementara untuk mengirim data ID via POST
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = 'delete_jadwal_praktikum.php'; // Pastikan action mengarah ke file yang benar
+
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'id';
+                        hiddenInput.value = id;
+
+                        form.appendChild(hiddenInput);
+                        document.body.appendChild(form);
+                        form.submit();
                     }
                 });
             });
 
             // Add event listener for edit buttons in the table
-            document.querySelectorAll('.action-button.edit-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    console.log('Tombol Edit diklik!'); // Debug
+            document.querySelectorAll('.action-button.edit-button').forEach(editBtn => {
+                editBtn.addEventListener('click', function() {
+                    // Populate form fields from data attributes
                     const id = this.dataset.id;
-                    const row = this.closest('tr');
-                    const tahunAjaran = row.children[1].textContent;
-                    const namaMatkul = row.children[2].textContent;
-                    const asistenPraktikum = row.children[3].textContent;
-                    const ruangLab = row.children[4].textContent;
-                    const kelas = row.children[5].textContent;
-                    const hari = row.children[6].textContent;
-                    const waktu = row.children[7].textContent.split(' - ');
-                    const waktuMulai = waktu[0];
-                    const waktuSelesai = waktu[1];
-
-                    // Populate the edit form fields (langsung ke input text)
                     document.getElementById('edit_id').value = id;
-                    document.getElementById('tahun_ajaran_edit').value = tahunAjaran;
-                    document.getElementById('nama_mata_kuliah_edit').value = namaMatkul;
-                    document.getElementById('asisten_praktikum_edit').value = asistenPraktikum;
-                    document.getElementById('ruang_lab_edit').value = ruangLab;
-                    document.getElementById('kelas_edit').value = kelas;
+                    document.getElementById('tahun_ajaran_edit').value = this.dataset.tahun_ajaran;
+                    document.getElementById('nama_mata_kuliah_edit').value = this.dataset.nama_mata_kuliah;
+                    document.getElementById('asisten_praktikum_edit').value = this.dataset.asisten_praktikum;
+                    document.getElementById('ruang_lab_edit').value = this.dataset.ruang_lab;
+                    document.getElementById('kelas_edit').value = this.dataset.kelas;
+                    document.getElementById('semester_edit').value = this.dataset.semester;
+                    
+                    // Set radio button for 'hari'
+                    const hari = this.dataset.hari;
+                    document.querySelector(`input[name='hari'][value='${hari}']#${hari.toLowerCase()}_edit`).checked = true;
 
-                    // Set radio button for Hari
-                    document.querySelectorAll('input[name="hari"][id^="senin_edit"], input[name="hari"][id^="selasa_edit"], input[name="hari"][id^="rabu_edit"], input[name="hari"][id^="kamis_edit"], input[name="hari"][id^="jumat_edit"], input[name="hari"][id^="sabtu_edit"]').forEach(radio => {
-                        radio.checked = (radio.value === hari);
-                    });
+                    document.getElementById('waktu_mulai_edit').value = this.dataset.waktu_mulai;
+                    document.getElementById('waktu_selesai_edit').value = this.dataset.waktu_selesai;
 
-                    document.getElementById('waktu_mulai_edit').value = waktuMulai;
-                    document.getElementById('waktu_selesai_edit').value = waktuSelesai;
-
-                    // Tampilkan form edit
-                    document.querySelector('.add-schedule-form').style.display = 'none';
-                    document.querySelector('.edit-schedule-form').style.display = 'block';
-                    document.querySelector('.main-content').classList.add('editing');
-                    document.querySelector('.main-content').classList.remove('adding');
-                    document.getElementById('schedule-header').classList.add('edit-mode');
-                    document.getElementById('schedule-header').querySelector('h2').innerHTML = '<span class="header-icon">📝</span>Edit Jadwal';
+                    // Show the edit form
+                    editScheduleForm.style.display = 'block';
+                    scheduleHeader.style.display = 'none';
+                    scheduleActions.style.display = 'none';
                 });
             });
 
             // Add event listener for the print button
             const printButton = document.querySelector('.print-button');
             if (printButton) {
-                printButton.addEventListener('click', function() {
+                printButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Apakah Anda yakin ingin mencetak atau export PDF data jadwal praktikum?')) {
                     window.print();
+                    }
                 });
             }
 
@@ -451,7 +527,7 @@ $result = $conn->query($sql);
 
             // Function to check and show/hide manual input
             function toggleManualEntriesInput() {
-                if (entriesSelect && manualEntriesInput) { // Check if elements exist
+                if (entriesSelect && manualEntriesInput) {
                     if (entriesSelect.value === 'manual_input') {
                         manualEntriesInput.style.display = 'inline-block';
                         if (manualEntriesInput.value === '') {
@@ -540,6 +616,18 @@ $result = $conn->query($sql);
                     }
                 });
             }
+
+            // Handle auto-populate semester for Add Form
+            document.getElementById('kelas').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                document.getElementById('semester').value = selectedOption.dataset.semester || '';
+            });
+
+            // Handle auto-populate semester for Edit Form
+            document.getElementById('kelas_edit').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                document.getElementById('semester_edit').value = selectedOption.dataset.semester || '';
+            });
         });
     </script>
 </body>

@@ -1,32 +1,41 @@
 <?php
-session_start();
-require_once 'db_connect.php'; // Sertakan file koneksi database
+require_once 'db_connect.php';
 
-// Cek role user
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin','laboran','kepala'])) {
-    header('Location: index.html?error=unauthorized');
-    exit();
-}
+// Memastikan request adalah POST dan ID ada
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+    
+    $id = intval($_POST['id']);
 
-if (isset($_GET['id'])) {
-    $id = $conn->real_escape_string($_GET['id']);
+    // Siapkan statement untuk keamanan
+    $sql = "DELETE FROM jadwal_praktikum WHERE id = ?";
 
-    // Query untuk menghapus data dari database
-    $sql = "DELETE FROM jadwal_praktikum WHERE id = $id";
-
-    if ($conn->query($sql) === TRUE) {
-        // Jika berhasil, redirect kembali ke halaman daftar jadwal praktikum
-        header("Location: jadwal_praktikum.php?status=success_delete");
-        exit();
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind ID ke parameter
+        $stmt->bind_param("i", $id);
+        
+        // Eksekusi statement
+        if ($stmt->execute()) {
+            // Jika berhasil, kirim pengguna kembali ke halaman daftar jadwal
+            echo "<script>
+                    alert('Jadwal berhasil dihapus!');
+                    window.location.href = 'jadwal_praktikum.php';
+                  </script>";
+            exit();
+        } else {
+            // Jika eksekusi gagal
+            echo "Error saat menghapus data: " . $stmt->error;
+        }
+        $stmt->close();
     } else {
-        // Jika gagal, tampilkan error
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Jika persiapan statement gagal
+        echo "Error: " . $conn->error;
     }
+    
+    $conn->close();
+
 } else {
-    // Jika ID tidak disediakan, redirect kembali ke halaman daftar jadwal praktikum
-    header("Location: jadwal_praktikum.php?status=error_no_id");
+    // Jika akses langsung atau tanpa ID, redirect ke halaman utama
+    header("Location: index.html?error=invalid_request");
     exit();
 }
-
-$conn->close(); // Tutup koneksi database
 ?> 

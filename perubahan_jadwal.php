@@ -22,7 +22,7 @@
                 <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
-                <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
+                <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
             </ul>
         </div>
@@ -42,7 +42,7 @@
                     <h3>Data Perubahan Jadwal</h3>
                 </div>
                 <div class="jadwal-actions-bar">
-                    <button class="btn-purple" onclick="window.print()">Cetak</button>
+                    <button class="btn-purple" onclick="if(confirm('Apakah Anda yakin ingin mencetak data perubahan jadwal ini?')) { window.print(); }">Cetak</button>
                 </div>
                 <div class="jadwal-table-section" id="jadwal-table-section">
                     <form id="filterForm" method="get" style="margin-bottom:0;">

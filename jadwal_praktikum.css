@@ -522,7 +522,7 @@
 /* Add margin below bar for spacing in normal mode */
 .schedule-header:not(.edit-mode):not(.adding) {
     margin-bottom: 32px; /* Extra space below green bar in normal mode */
-}
+} 
 
 /* Tambahan style untuk halaman perubahan jadwal */
 .jadwal-box {

@@ -45,7 +45,7 @@ $asisten_si = $conn->query("SELECT COUNT(*) FROM asisten_praktikum WHERE nama_pr
                 <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
-                <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
+                <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
                 <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
             </ul>
         </div>

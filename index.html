@@ -15,6 +15,7 @@
         <div class="login-box">
             <img src="unibba-logo.png" alt="Logo" class="logo">
             <h3>MASUKKAN AKUN</h3>
+            <div id="error-message" style="display:none;color:#fff;background:#e53935;padding:8px 12px;margin-bottom:10px;border-radius:6px;text-align:center;font-size:0.98em;"></div>
             <form action="login_process.php" method="post">
                 <div class="input-group">
                     <input type="text" name="username" placeholder="admin" required>
@@ -28,5 +29,18 @@
             </form>
         </div>
     </div>
+    <script>
+    // Tampilkan pesan error jika ada parameter error di URL
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    if (error) {
+        let msg = '';
+        if (error === 'invalid_credentials') msg = 'Username atau password salah!';
+        else if (error === 'unknown_role') msg = 'Role pengguna tidak dikenali!';
+        else msg = 'Login gagal. Silakan coba lagi.';
+        document.getElementById('error-message').textContent = msg;
+        document.getElementById('error-message').style.display = '';
+    }
+    </script>
 </body>
 </html> 

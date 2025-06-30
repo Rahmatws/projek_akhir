@@ -56,7 +56,7 @@ $result = $conn->query($sql);
             <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
             <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
             <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
-            <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
+            <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
             <li><a href="laboran.php"><i class="icon">📄</i> Laboran</a></li>
         </ul>
     </div>
@@ -77,8 +77,56 @@ $result = $conn->query($sql);
             </div>
             <div class="praktikan-actions-bar">
                 <button class="btn-green" id="show-add-form">+ Tambah Praktikan</button>
-                <button class="btn-purple">Cetak</button>
+                <button class="btn-purple" onclick="window.print()">Cetak</button>
             </div>
+
+            <!-- FORM TAMBAH PRAKTIKAN KE KELAS -->
+            <div class="praktikan-add-section" id="praktikan-add-section" style="display: none;">
+                <div class="praktikan-add-header" style="background:#28a745;color:#fff;padding:10px 20px;border-radius:6px 6px 0 0;">
+                    <span class="add-icon">➕</span> <span class="add-title">Tambah Praktikan ke Kelas <?php echo htmlspecialchars($nama_kelas); ?></span>
+                </div>
+                <form id="form-add-detail-kelas" method="post" action="detail_kelas.php?id=<?php echo $id_kelas; ?>&add=1" autocomplete="off">
+                    <input type="hidden" name="semester" value="<?php echo htmlspecialchars($semester); ?>">
+                    <table class="praktikan-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Praktikan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="add-detailkelas-tbody">
+                            <!-- Baris pertama -->
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <select name="praktikan[]" required>
+                                        <option value="">- Pilih Praktikan -</option>
+                                        <?php
+                                        // Dropdown: semua praktikan yang belum punya kelas
+                                        $praktikan_sql = "SELECT nim, nama_lengkap FROM praktikan WHERE kelas IS NULL OR kelas = '' ORDER BY nama_lengkap ASC";
+                                        $praktikan_res = $conn->query($praktikan_sql);
+                                        while($row = $praktikan_res->fetch_assoc()) {
+                                            echo '<option value="'.htmlspecialchars($row['nim']).'">'.htmlspecialchars($row['nama_lengkap']).' ('.$row['nim'].')</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                                <td><button type="button" class="btn-del-row" style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:4px;">✖</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="praktikan-add-footer" style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                        <button type="button" class="btn-purple" id="add-row-tambah">+ Baris Baru</button>
+                        <div class="footer-right">
+                            <button type="reset" class="btn-reset">Reset</button>
+                            <button type="submit" class="btn-green">Simpan</button>
+                            <button type="button" class="btn-back" id="hide-add-form">Back</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <?php if (isset($_GET['edit']) && $_GET['edit'] == '1'): ?>
             <!-- FORM EDIT MULTI DETAIL KELAS -->
             <div class="praktikan-add-section" id="praktikan-edit-section">
@@ -147,17 +195,17 @@ $result = $conn->query($sql);
                     ?></select></td>
                     <td><button type=\"button\" class=\"btn-del-row\" style=\"background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:4px;\">✖</button></td>`;
                 tbody.appendChild(tr);
-                updateRowNumbers();
+                updateRowNumbers('edit-detailkelas-tbody');
             };
             document.getElementById('edit-detailkelas-tbody').onclick = function(e) {
                 if (e.target.classList.contains('btn-del-row')) {
                     const row = e.target.closest('tr');
                     row.parentNode.removeChild(row);
-                    updateRowNumbers();
+                    updateRowNumbers('edit-detailkelas-tbody');
                 }
             };
-            function updateRowNumbers() {
-                const rows = document.querySelectorAll('#edit-detailkelas-tbody tr');
+            function updateRowNumbers(tbodyId) {
+                const rows = document.querySelectorAll(`#${tbodyId} tr`);
                 rows.forEach((tr, i) => tr.children[0].textContent = i + 1);
             }
             </script>
@@ -315,105 +363,73 @@ $result = $conn->query($sql);
 }
 </style>
 <script>
-// Show/Hide Add Praktikan Form (dummy, bisa dikembangkan)
-document.getElementById('show-add-form').onclick = function() {
-    window.location.href = 'detail_kelas.php?id=<?php echo $id_kelas; ?>&add=1';
-};
-// Show Entries & Search Otomatis
-const entriesSelect = document.getElementById('entriesSelect');
-const manualEntriesInput = document.getElementById('manualEntriesInput');
-const searchInput = document.getElementById('searchInput');
-(function(){
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get('entries') === 'manual_input'){
-        entriesSelect.value = 'manual_input';
-        manualEntriesInput.style.display = '';
-        manualEntriesInput.value = urlParams.get('manual_entries') || '';
-    } else {
-        entriesSelect.value = urlParams.get('entries') || '10';
-        manualEntriesInput.style.display = 'none';
-    }
-})();
-entriesSelect.addEventListener('change', function(){
-    if(this.value === 'manual_input'){
-        manualEntriesInput.style.display = '';
-        manualEntriesInput.focus();
-    } else {
-        manualEntriesInput.style.display = 'none';
-        document.getElementById('filterForm').submit();
-    }
-});
-manualEntriesInput.addEventListener('input', function(){
-    if(this.value && parseInt(this.value) > 0){
-        document.getElementById('filterForm').submit();
-    } else if(this.value === '' || parseInt(this.value) < 1) {
-        entriesSelect.value = '10';
-        manualEntriesInput.style.display = 'none';
-        manualEntriesInput.value = '';
-        const url = new URL(window.location.href);
-        url.searchParams.set('entries', '10');
-        url.searchParams.delete('manual_entries');
-        url.searchParams.set('page', '1');
-        window.location.href = url.toString();
-    }
-});
-searchInput.addEventListener('input', function(){
-    document.getElementById('filterForm').submit();
-});
-// Checkbox Select All
-const selectAll = document.getElementById('select-all');
-const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-if (selectAll) {
-    selectAll.addEventListener('change', function() {
-        rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
-    });
-    rowCheckboxes.forEach(cb => {
-        cb.addEventListener('change', function() {
-            if (!cb.checked) {
-                selectAll.checked = false;
-            } else {
-                if ([...rowCheckboxes].every(c => c.checked)) {
-                    selectAll.checked = true;
-                }
-            }
+document.addEventListener('DOMContentLoaded', function() {
+    const showAddFormBtn = document.getElementById('show-add-form');
+    const hideAddFormBtn = document.getElementById('hide-add-form');
+    const addSection = document.getElementById('praktikan-add-section');
+    const editSection = document.getElementById('praktikan-edit-section');
+    const tableSection = document.getElementById('praktikan-table-section');
+    
+    // Tombol + Tambah Praktikan
+    if(showAddFormBtn) {
+        showAddFormBtn.addEventListener('click', function() {
+            tableSection.style.display = 'none';
+            if(editSection) editSection.style.display = 'none';
+            addSection.style.display = 'block';
         });
-    });
-}
-// Tombol Edit
-const btnEdit = document.getElementById('show-edit-form');
-if (btnEdit) {
-    btnEdit.onclick = function() {
-        window.location.href = 'detail_kelas.php?id=<?php echo $id_kelas; ?>&edit=1';
+    }
+
+    // Tombol Back di form Tambah
+    if(hideAddFormBtn) {
+        hideAddFormBtn.addEventListener('click', function() {
+            addSection.style.display = 'none';
+            tableSection.style.display = 'block';
+        });
+    }
+
+    // --- Logika untuk Form Edit ---
+    const showEditFormBtn = document.getElementById('show-edit-form');
+    if(showEditFormBtn) {
+        showEditFormBtn.addEventListener('click', function() {
+            window.location.href = '?id=<?php echo $id_kelas; ?>&edit=1';
+        });
+    }
+
+    // --- Logika untuk Tambah Baris di Form Tambah ---
+    const addRowTambahBtn = document.getElementById('add-row-tambah');
+    if (addRowTambahBtn) {
+        addRowTambahBtn.onclick = function() {
+            const tbody = document.getElementById('add-detailkelas-tbody');
+            const rowCount = tbody.rows.length + 1;
+            const tr = document.createElement('tr');
+            
+            // Kloning dropdown dari baris pertama untuk efisiensi
+            const firstRowSelect = tbody.querySelector('select');
+            const newSelect = firstRowSelect.cloneNode(true);
+            
+            tr.innerHTML = `<td>${rowCount}</td>
+                <td></td>
+                <td><button type="button" class="btn-del-row" style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:4px;">✖</button></td>`;
+            
+            // Masukkan select ke dalam sel kedua
+            tr.cells[1].appendChild(newSelect);
+            tbody.appendChild(tr);
+        };
+    }
+
+    // Hapus baris di form Tambah
+    document.getElementById('add-detailkelas-tbody').onclick = function(e) {
+        if (e.target.classList.contains('btn-del-row')) {
+            const row = e.target.closest('tr');
+            if (document.querySelectorAll('#add-detailkelas-tbody tr').length > 1) {
+                row.parentNode.removeChild(row);
+                updateRowNumbers('add-detailkelas-tbody');
+            } else {
+                alert('Minimal harus ada satu baris.');
+            }
+        }
     };
-}
-// Tombol Hapus
-document.getElementById('delete-selected').onclick = function() {
-    const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
-    if (checkedBoxes.length === 0) {
-        alert('Silakan pilih data yang akan dihapus dari kelas!');
-        return;
-    }
-    if (!confirm('Apakah Anda yakin ingin menghapus data yang dipilih dari kelas ini?')) {
-        return;
-    }
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'detail_kelas.php?id=<?php echo $id_kelas; ?>&delete=1';
-    checkedBoxes.forEach(checkbox => {
-        const row = checkbox.closest('tr');
-        const nim = row.cells[3].textContent;
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'selected_ids[]';
-        input.value = nim;
-        form.appendChild(input);
-    });
-    document.body.appendChild(form);
-    form.submit();
-};
-// Pastikan tombol Cetak hanya mencetak print-area
-const btnCetak = document.querySelector('.btn-purple');
-if (btnCetak) btnCetak.onclick = function() { window.print(); };
+});
 </script>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['delete']) && $_GET['delete'] == '1' && isset($_POST['selected_ids'])) {
@@ -422,6 +438,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['delete']) && $_GET['de
         $conn->query($sql);
     }
     echo "<script>alert('Data berhasil dihapus dari kelas!');window.location='detail_kelas.php?id=$id_kelas';</script>";
+    exit;
+}
+// Proses form TAMBAH
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['add']) && $_GET['add'] == '1' && isset($_POST['praktikan'])) {
+    $praktikan_arr = array_unique($_POST['praktikan']);
+    $semester_to_add = isset($_POST['semester']) ? intval($_POST['semester']) : 0; // Ambil semester dari form
+
+    if ($semester_to_add > 0) {
+        foreach ($praktikan_arr as $nim) {
+            if (!empty($nim)) {
+                $sql_update = "UPDATE praktikan SET kelas = ?, semester = ? WHERE nim = ?";
+                $stmt = $conn->prepare($sql_update);
+                $stmt->bind_param("sis", $nama_kelas, $semester_to_add, $nim);
+                $stmt->execute();
+            }
+        }
+        echo "<script>alert('Praktikan berhasil ditambahkan ke kelas!');window.location='detail_kelas.php?id=$id_kelas';</script>";
+    } else {
+        echo "<script>alert('Error: Semester tidak valid.');window.location='detail_kelas.php?id=$id_kelas';</script>";
+    }
     exit;
 }
 ?>
