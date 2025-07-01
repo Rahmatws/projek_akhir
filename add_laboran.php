@@ -1,5 +1,11 @@
 <?php
 require_once 'db_connect.php';
+session_start();
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if($role !== 'admin') {
+    header('Location: laboran.php?error=akses');
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -13,6 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Hash password sebelum menyimpan ke database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+    $foto_name = null;
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
+        $target_dir = 'uploads/laboran/';
+        if (!is_dir($target_dir)) { mkdir($target_dir, 0777, true); }
+        $foto_name = uniqid() . '_' . basename($_FILES['foto']['name']);
+        move_uploaded_file($_FILES['foto']['tmp_name'], $target_dir . $foto_name);
+    }
+
     // Start transaction
     $conn->begin_transaction();
 
@@ -23,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_users->execute();
 
         // Insert into tb_laboran_details table
-        $stmt_details = $conn->prepare("INSERT INTO tb_laboran_details (username, nama, gender, alamat, hp) VALUES (?, ?, ?, ?, ?)");
-        $stmt_details->bind_param("sssss", $username, $nama, $gender, $alamat, $hp);
+        $stmt_details = $conn->prepare("INSERT INTO tb_laboran_details (username, nama, gender, alamat, hp, foto) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt_details->bind_param("ssssss", $username, $nama, $gender, $alamat, $hp, $foto_name);
         $stmt_details->execute();
 
         // Commit transaction

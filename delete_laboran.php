@@ -1,5 +1,11 @@
 <?php
 require_once 'db_connect.php';
+session_start();
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if($role !== 'admin') {
+    header('Location: laboran.php?error=akses');
+    exit();
+}
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id_user = $_GET['id'];

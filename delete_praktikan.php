@@ -1,4 +1,11 @@
 <?php
+session_start();
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if($role === 'kepala') {
+    header('Location: praktikan.php?error=akses');
+    exit();
+}
+
 include 'db_connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selected_ids'])) {

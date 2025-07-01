@@ -1,5 +1,8 @@
 <?php
 require_once 'db_connect.php'; // Sertakan file koneksi database
+session_start();
+$nama = isset($_SESSION['nama']) && $_SESSION['nama'] ? $_SESSION['nama'] : 'User';
+$foto = (isset($_SESSION['foto']) && $_SESSION['foto']) ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
 
 // --- Data Fetching for Dropdowns ---
 // 1. Mata Praktikum
@@ -128,7 +131,7 @@ $result = $conn->query($sql);
 
                     <div class="form-group">
                         <label for="kelas">Kelas</label>
-                         <select id="kelas" name="kelas" required>
+                        <select id="kelas" name="kelas" required>
                             <option value="" data-semester="">Pilih Kelas</option>
                             <?php foreach ($kelas_list as $item): ?>
                                 <option value="<?php echo htmlspecialchars($item['nama_kelas']); ?>" data-semester="<?php echo htmlspecialchars($item['semester']); ?>">
@@ -193,7 +196,7 @@ $result = $conn->query($sql);
                     </div>
                     <div class="form-group">
                         <label for="asisten_praktikum_edit">Asisten Praktikum</label>
-                         <select id="asisten_praktikum_edit" name="asisten_praktikum" required>
+                        <select id="asisten_praktikum_edit" name="asisten_praktikum" required>
                             <option value="">Pilih Asisten Praktikum</option>
                             <?php foreach ($asisten_list as $item): ?>
                                 <option value="<?php echo htmlspecialchars($item['nama_asisten']); ?>"><?php echo htmlspecialchars($item['nama_asisten']); ?></option>
@@ -396,7 +399,36 @@ $result = $conn->query($sql);
         .print-area table { page-break-inside: auto; }
         .print-area th, .print-area td { font-size: 1em; }
     }
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 10;
+        background: #fff;
+        padding: 4px 12px;
+        border-radius: 24px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .user-info .user-name {
+        font-weight: bold;
+        color: #555;
+    }
+    .user-info .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
     </style>
+    <div class="user-info">
+        <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+        <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -482,7 +514,7 @@ $result = $conn->query($sql);
                     document.getElementById('ruang_lab_edit').value = this.dataset.ruang_lab;
                     document.getElementById('kelas_edit').value = this.dataset.kelas;
                     document.getElementById('semester_edit').value = this.dataset.semester;
-                    
+
                     // Set radio button for 'hari'
                     const hari = this.dataset.hari;
                     document.querySelector(`input[name='hari'][value='${hari}']#${hari.toLowerCase()}_edit`).checked = true;

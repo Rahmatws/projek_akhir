@@ -1,5 +1,9 @@
 <?php
 require_once 'db_connect.php';
+session_start();
+$nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+$foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 // Ambil id kelas dari URL
 $id_kelas = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id_kelas <= 0) {
@@ -53,7 +57,7 @@ $result = $conn->query($sql);
             <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
             <li><a href="kelas.php" class="active"><i class="icon">🏫</i> Kelas</a></li>
             <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-            <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+            <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
             <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
             <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
             <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -67,8 +71,8 @@ $result = $conn->query($sql);
                 <span class="breadcrumb">Data Master Detail Kelas, Menampilkan Data Detail Kelas</span>
             </div>
             <div class="user-info">
-                <span class="user-name">Uchiha Atep</span>
-                <img src="user.png" alt="User" class="user-avatar">
+                <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
             </div>
         </div>
         <div class="praktikan-box">
@@ -76,7 +80,9 @@ $result = $conn->query($sql);
                 <h3>Daftar Detail Kelas <?php echo htmlspecialchars($nama_kelas); ?> (Semester <?php echo htmlspecialchars($semester); ?>)</h3>
             </div>
             <div class="praktikan-actions-bar">
+                <?php if($role !== 'kepala'): ?>
                 <button class="btn-green" id="show-add-form">+ Tambah Praktikan</button>
+                <?php endif; ?>
                 <button class="btn-purple" onclick="window.print()">Cetak</button>
             </div>
 
@@ -211,6 +217,10 @@ $result = $conn->query($sql);
             </script>
             <?php
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['edit']) && $_GET['edit'] == '1' && isset($_POST['praktikan'])) {
+                if($role === 'kepala') {
+                    header('Location: detail_kelas.php?id='.$id_kelas.'&error=akses');
+                    exit;
+                }
                 // Reset semua praktikan di kelas ini
                 $conn->query("UPDATE praktikan SET kelas=NULL, semester=NULL WHERE kelas = '".$conn->real_escape_string($nama_kelas)."' AND semester = '".$conn->real_escape_string($semester)."'");
                 // Update praktikan baru
@@ -244,8 +254,8 @@ $result = $conn->query($sql);
                         </div>
                         <div class="praktikan-table-right">
                             <div class="table-actions-group">
-                                <button type="button" class="btn-orange" id="show-edit-form">Edit</button>
-                                <button type="button" class="btn-red" id="delete-selected">Hapus</button>
+                                <button class="btn-warning" id="btn-edit" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>Edit</button>
+                                <button class="btn-danger" id="btn-hapus" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>Hapus</button>
                             </div>
                             <div class="search-box">
                                 <label>Search: <input type="text" name="search" id="searchInput" placeholder="Cari..." value="<?php echo htmlspecialchars($search_query); ?>"></label>
@@ -361,6 +371,27 @@ $result = $conn->query($sql);
     .print-area table { page-break-inside: auto; }
     .print-area th, .print-area td { font-size: 1em; }
 }
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    z-index: 10;
+}
+.user-info .user-name {
+    font-weight: bold;
+    color: #555;
+}
+.user-info .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -388,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Logika untuk Form Edit ---
-    const showEditFormBtn = document.getElementById('show-edit-form');
+    const showEditFormBtn = document.getElementById('btn-edit');
     if(showEditFormBtn) {
         showEditFormBtn.addEventListener('click', function() {
             window.location.href = '?id=<?php echo $id_kelas; ?>&edit=1';
@@ -433,6 +464,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['delete']) && $_GET['delete'] == '1' && isset($_POST['selected_ids'])) {
+    if($role === 'kepala') {
+        header('Location: detail_kelas.php?id='.$id_kelas.'&error=akses');
+        exit;
+    }
     foreach ($_POST['selected_ids'] as $nim) {
         $sql = "UPDATE praktikan SET kelas=NULL, semester=NULL WHERE nim = '".$conn->real_escape_string($nim)."'";
         $conn->query($sql);
@@ -442,6 +477,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['delete']) && $_GET['de
 }
 // Proses form TAMBAH
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['add']) && $_GET['add'] == '1' && isset($_POST['praktikan'])) {
+    if($role === 'kepala') {
+        header('Location: detail_kelas.php?id='.$id_kelas.'&error=akses');
+        exit;
+    }
     $praktikan_arr = array_unique($_POST['praktikan']);
     $semester_to_add = isset($_POST['semester']) ? intval($_POST['semester']) : 0; // Ambil semester dari form
 

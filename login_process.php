@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'db_connect.php'; // Sertakan file koneksi database
 
 // Check if the form was submitted
@@ -22,6 +23,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verifikasi password: hash (baru) atau plaintext (lama)
         if (password_verify($_POST['password'], $hashed_password) || $_POST['password'] === $hashed_password) {
+            // Ambil nama dan foto dari tb_laboran_details
+            $stmt = $conn->prepare("SELECT nama, foto FROM tb_laboran_details WHERE username = ?");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result_detail = $stmt->get_result();
+            $data_detail = $result_detail->fetch_assoc();
+            $stmt->close();
+
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $role;
+            $_SESSION['nama'] = isset($data_detail['nama']) ? $data_detail['nama'] : $username;
+            $_SESSION['foto'] = isset($data_detail['foto']) ? $data_detail['foto'] : '';
+
             // Arahkan ke dashboard yang sesuai berdasarkan peran
             if ($role === "admin") {
                 header("Location: dashboard.php");

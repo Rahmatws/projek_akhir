@@ -1,5 +1,11 @@
 <?php
 require_once 'db_connect.php';
+session_start();
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if($role !== 'admin') {
+    header('Location: ruang_laboratorium.php?error=akses');
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];

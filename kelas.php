@@ -1,5 +1,9 @@
 <?php
     require_once 'db_connect.php'; // Sertakan file koneksi database
+    session_start();
+    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+    $foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 
     // --- Pagination Logic --- 
     $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10; // Jumlah entri per halaman
@@ -49,6 +53,29 @@
     <title>Daftar Kelas Praktikum</title>
     <link rel="stylesheet" href="kelas.css">
     <link rel="stylesheet" href="dashboard.css"> <!-- Untuk sidebar dan general styling -->
+    <style>
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            z-index: 10;
+        }
+        .user-info .user-name {
+            font-weight: bold;
+            color: #555;
+        }
+        .user-info .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -62,7 +89,7 @@
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php" class="active"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">��‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -76,8 +103,8 @@
                     <span class="breadcrumb">Data Master Kelas, Menampilkan data Kelas Praktikum</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
 
@@ -86,7 +113,9 @@
                     <h2><span class="header-icon">🏫</span> Daftar Kelas Praktikum</h2>
                 </div>
                 <div class="kelas-actions">
+                    <?php if($role !== 'kepala'): ?>
                     <button class="add-kelas-button" id="show-add-form-button">+ Tambah Kelas</button>
+                    <?php endif; ?>
                 </div>
 
                 <div class="data-table">
@@ -127,8 +156,10 @@
                                     echo "<td>";
                                     echo "<div class=\"action-buttons-wrapper\">";
                                     echo "<a href='detail_kelas.php?id=" . $row["id"] . "' class='action-button view-button' title='Detail Kelas'>📊</a>";
-                                    echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
-                                    echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    if($role !== 'kepala') {
+                                        echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
+                                        echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    }
                                     echo "</div>";
                                     echo "</td>";
                                     echo "</tr>";

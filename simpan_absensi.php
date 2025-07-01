@@ -63,6 +63,8 @@ if ($sukses) {
     // Jika semua berhasil, commit transaksi
     $conn->commit();
     $_SESSION['success_message'] = "Absensi untuk pertemuan ke-$pertemuan_ke berhasil disimpan!";
+    header('Location: laporan_absensi.php');
+    exit();
 } else {
     // Jika ada yang gagal, batalkan semua perubahan
     $conn->rollback();

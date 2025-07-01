@@ -1,5 +1,8 @@
 <?php
 require_once 'db_connect.php';
+session_start();
+$nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+$foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
 // Praktikan statistik
 $praktikan_if = $conn->query("SELECT COUNT(*) FROM praktikan WHERE prodi='Teknik Informatika'")->fetch_row()[0];
 $praktikan_si = $conn->query("SELECT COUNT(*) FROM praktikan WHERE prodi='Sistem Informasi'")->fetch_row()[0];
@@ -29,6 +32,33 @@ $asisten_si = $conn->query("SELECT COUNT(*) FROM asisten_praktikum WHERE nama_pr
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: fixed;
+        top: 20px;
+        right: 40px;
+        z-index: 100;
+        background: #fff;
+        padding: 4px 12px;
+        border-radius: 24px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .user-info .user-name {
+        font-weight: bold;
+        color: #555;
+    }
+    .user-info .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -42,7 +72,7 @@ $asisten_si = $conn->query("SELECT COUNT(*) FROM asisten_praktikum WHERE nama_pr
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -56,6 +86,10 @@ $asisten_si = $conn->query("SELECT COUNT(*) FROM asisten_praktikum WHERE nama_pr
                     <div class="time">Waktu: <span id="clock"></span></div>
                     <div class="date">Tanggal: <span id="calendar"></span></div>
                 </div>
+            </div>
+            <div class="user-info">
+                <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
             </div>
             <div class="data-cards">
                 <div class="card">

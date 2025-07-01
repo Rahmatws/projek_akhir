@@ -1,5 +1,10 @@
 <?php
 require_once 'db_connect.php';
+session_start();
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin','laboran'])) {
+    header('Location: kelas.php?error=akses');
+    exit();
+}
 
 if (isset($_GET['id'])) {
     $id = $conn->real_escape_string($_GET['id']);

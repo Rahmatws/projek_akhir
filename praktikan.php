@@ -19,7 +19,7 @@
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php" class="active"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -33,8 +33,14 @@
                     <span class="breadcrumb">Data Master Praktikan, Menampilkan Data Praktikan</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <?php
+                    session_start();
+                    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+                    $foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+                    $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+                    ?>
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
             <div class="praktikan-box">
@@ -42,7 +48,7 @@
                     <h3>Daftar Praktikan</h3>
                 </div>
                 <div class="praktikan-actions-bar">
-                    <button class="btn-green" id="show-add-form">+ Tambah Praktikan</button>
+                    <button class="btn-green" id="show-add-form" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>+ Tambah Praktikan</button>
                     <button class="btn-purple">Cetak</button>
                 </div>
                 <!-- Tabel Daftar Praktikan -->
@@ -64,8 +70,8 @@
                         </div>
                         <div class="praktikan-table-right">
                             <div class="table-actions-group">
-                                <button type="button" class="btn-orange">Edit</button>
-                                <button type="button" class="btn-red">Hapus</button>
+                                <button type="button" class="btn-orange" id="btn-edit" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>Edit</button>
+                                <button type="button" class="btn-red" id="btn-hapus" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>Hapus</button>
                             </div>
                             <div class="search-box">
                                 <label>Search: <input type="text" name="search" id="searchInput" placeholder="Cari..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"></label>
@@ -186,12 +192,12 @@
                                             <option value="Sistem Informasi">Sistem Informasi</option>
                                         </select>
                                     </td>
-                                    <td><button type="button" class="btn-del-row">✖</button></td>
+                                    <td><button type="button" class="btn-del-row" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>✖</button></td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="praktikan-add-footer">
-                            <button type="button" class="btn-purple" id="add-row">+ Baris Baru</button>
+                            <button type="button" class="btn-purple" id="add-row" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>+ Baris Baru</button>
                             <div class="footer-right">
                                 <button type="reset" class="btn-reset">Reset</button>
                                 <button type="submit" class="btn-green">Simpan</button>
@@ -221,7 +227,7 @@
                         <td><input type="text" name="alamat[]" placeholder="Alamat" required></td>
                         <td><input type="text" name="tgl_lahir[]" placeholder="hh/bb/tttt" required></td>
                         <td><select name="prodi[]" required><option value="">- Prodi -</option><option value="Teknik Informatika">Teknik Informatika</option><option value="Sistem Informasi">Sistem Informasi</option></select></td>
-                        <td><button type="button" class="btn-del-row">✖</button></td>`;
+                        <td><button type="button" class="btn-del-row" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>✖</button></td>`;
                     tbody.appendChild(tr);
                     updateRowNumbers();
                 };
@@ -416,6 +422,27 @@
         .print-area { display: block !important; margin: 0; padding: 0; }
         .print-area table { page-break-inside: auto; }
         .print-area th, .print-area td { font-size: 1em; }
+    }
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 10;
+    }
+    .user-info .user-name {
+        font-weight: bold;
+        color: #555;
+    }
+    .user-info .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     </style>
     <script>

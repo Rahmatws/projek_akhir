@@ -1,4 +1,11 @@
 <?php
+session_start();
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if($role === 'kepala') {
+    header('Location: asisten_praktikum.php?error=akses');
+    exit();
+}
+
 require_once 'db_connect.php'; // Sertakan file koneksi database
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -19,7 +19,7 @@
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -33,8 +33,13 @@
                     <span class="breadcrumb">Data Master Perubahan Jadwal Praktikum, Menampilkan dan perubahan jadwal praktikum</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <?php
+                    session_start();
+                    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+                    $foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+                    ?>
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
             <div class="jadwal-box">
@@ -257,6 +262,27 @@
         .print-area { display: block !important; margin: 0; padding: 0; }
         .print-area table { page-break-inside: auto; }
         .print-area th, .print-area td { font-size: 1em; }
+    }
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 10;
+    }
+    .user-info .user-name {
+        font-weight: bold;
+        color: #555;
+    }
+    .user-info .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     </style>
 </body>

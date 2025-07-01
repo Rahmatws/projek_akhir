@@ -33,8 +33,18 @@
                     <span class="breadcrumb">Form untuk melakukan edit data Praktikan</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <?php
+                    session_start();
+                    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+                    $foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+                    $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+                    if($role === 'kepala') {
+                        header('Location: praktikan.php?error=akses');
+                        exit();
+                    }
+                    ?>
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
             <div class="praktikan-box">

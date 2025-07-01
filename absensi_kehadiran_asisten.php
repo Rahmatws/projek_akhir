@@ -42,6 +42,9 @@ if ($search_query !== '') {
 $total_records = count($filtered);
 $total_pages = ceil($total_records / $limit_per_page);
 $filtered = array_slice(array_values($filtered), $offset, $limit_per_page);
+session_start();
+$nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+$foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +67,7 @@ $filtered = array_slice(array_values($filtered), $offset, $limit_per_page);
             <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
             <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
             <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-            <li><a href="absensi_kehadiran.php" class="active"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+            <li><a href="laporan_absensi.php" class="active"><i class="icon">✅</i> Absensi Kehadiran</a></li>
             <li><a href="mata_praktikum.html"><i class="icon">📚</i> Mata Praktikum</a></li>
             <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
             <li><a href="ruang_laboratorium.html"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -78,8 +81,8 @@ $filtered = array_slice(array_values($filtered), $offset, $limit_per_page);
                 <span class="breadcrumb">Data Master Absensi Kehadiran, Menampilkan Laba absensi kehadiran</span>
             </div>
             <div class="user-info">
-                <span class="user-name">Uchiha Atep</span>
-                <img src="user.png" alt="User" class="user-avatar">
+                <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
             </div>
         </div>
         <div class="attendance-container">
@@ -238,6 +241,27 @@ $filtered = array_slice(array_values($filtered), $offset, $limit_per_page);
 }
 .attendance-details-grid b {
   font-weight: bold;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    z-index: 10;
+}
+.user-info .user-name {
+    font-weight: bold;
+    color: #555;
+}
+.user-info .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 </style>
 <script>

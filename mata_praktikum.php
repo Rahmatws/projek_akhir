@@ -1,5 +1,9 @@
 <?php
 include 'db_connect.php';
+session_start();
+$nama = isset($_SESSION['nama']) && $_SESSION['nama'] ? $_SESSION['nama'] : 'User';
+$foto = (isset($_SESSION['foto']) && $_SESSION['foto']) ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 // --- Pagination Logic --- 
 $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10;
 if (isset($_GET['entries']) && $_GET['entries'] === 'manual_input' && isset($_GET['manual_entries']) && intval($_GET['manual_entries']) > 0) {
@@ -43,6 +47,33 @@ $result = $conn->query($sql);
     <title>Daftar Mata Praktikum</title>
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="mata_praktikum.css">
+    <style>
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            z-index: 10;
+            background: #fff;
+            padding: 4px 12px;
+            border-radius: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .user-info .user-name {
+            font-weight: bold;
+            color: #555;
+        }
+        .user-info .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -56,7 +87,7 @@ $result = $conn->query($sql);
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php" class="active"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -70,8 +101,8 @@ $result = $conn->query($sql);
                     <span class="breadcrumb" id="main-breadcrumb-text">Data Master Mata Kuliah, Menampilkan data Mata Praktikum Laboratorium FTI UNIBBA</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
 
@@ -80,7 +111,7 @@ $result = $conn->query($sql);
                     <h2><span class="header-icon">📚</span> Daftar Mata Praktikum</h2>
                 </div>
                 <div class="mata-praktikum-actions">
-                    <button class="add-mata-praktikum-button" id="show-add-form-button">+ Tambah Mata Praktikum</button>
+                    <button class="add-mata-praktikum-button" id="show-add-form-button" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>+ Tambah Mata Praktikum</button>
                 </div>
 
                 <div class="data-table">
@@ -119,11 +150,16 @@ $result = $conn->query($sql);
                                     <td>" . htmlspecialchars($row['nama_matkul']) . "</td>
                                     <td>" . htmlspecialchars($row['sks']) . "</td>
                                     <td>" . htmlspecialchars($row['semester']) . "</td>
-                                    <td>
-                                        <button class='action-button edit-button'>📝</button>
-                                        <button class='action-button delete-button'>🗑️</button>
-                                    </td>
-                                </tr>";
+                                    <td>";
+                                // Tombol Edit
+                                if($role==='kepala') {
+                                    echo "<button class='action-button edit-button' disabled style='opacity:0.6;pointer-events:none;'>📝</button>";
+                                    echo "<button class='action-button delete-button' disabled style='opacity:0.6;pointer-events:none;'>🗑️</button>";
+                                } else {
+                                    echo "<button class='action-button edit-button'>📝</button>";
+                                    echo "<button class='action-button delete-button'>🗑️</button>";
+                                }
+                                echo "</td>\n</tr>";
                                 $no++;
                             }
                         } else {

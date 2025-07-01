@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Jadwal berhasil ditambahkan!'); window.location.href='jadwal_praktikum.php';</script>";
         } else {
             echo "Error: " . $stmt_insert->error;
-        }
+    }
         $stmt_insert->close();
     }
     $stmt_check->close();

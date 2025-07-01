@@ -11,6 +11,10 @@
 <body>
     <?php
     require_once 'db_connect.php'; // Sertakan file koneksi database
+    session_start();
+    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+    $foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 
     // --- Pagination Logic --- 
     $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10; // Jumlah entri per halaman
@@ -57,7 +61,7 @@
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php" class="active"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -71,8 +75,8 @@
                     <span class="breadcrumb" id="main-breadcrumb-text">Data Master Asisten Praktikum, Menampilkan data Asisten Praktikum</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
 
@@ -81,7 +85,7 @@
                     <h2><span class="header-icon">🧑‍🏫</span> Daftar Asisten Praktikum</h2>
                 </div>
                 <div class="asisten-actions">
-                    <button class="add-asisten-button" id="show-add-form-button">+ Tambah Asisten Praktikum</button>
+                    <button class="add-asisten-button" id="show-add-form-button" <?php if($role==='kepala') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>+ Tambah Asisten Praktikum</button>
                 </div>
 
                 <div class="data-table">
@@ -121,8 +125,13 @@
                                     echo "<td>" . htmlspecialchars($row["nama_prodi"]) . "</td>";
                                     echo "<td>";
                                     echo "<a href='absensi_kehadiran_asisten.php?id_asisten=" . $row["id"] . "' class='action-button view-button' title='Lihat Absensi'>📊</a>";
-                                    echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
-                                    echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    if($role==='kepala') {
+                                        echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\" disabled style='opacity:0.6;pointer-events:none;'>📝</button>";
+                                        echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\" disabled style='opacity:0.6;pointer-events:none;'>🗑️</button>";
+                                    } else {
+                                        echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">📝</button>";
+                                        echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    }
                                     echo "</td>";
                                     echo "</tr>";
                                 }

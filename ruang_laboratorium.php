@@ -1,5 +1,9 @@
 <?php
     require_once 'db_connect.php'; // Sertakan file koneksi database
+    session_start();
+    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+    $foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 
     // --- Pagination Logic ---
     $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10;
@@ -31,6 +35,29 @@
     <title>Ruang Laboratorium</title>
     <link rel="stylesheet" href="ruang_laboratorium.css">
     <link rel="stylesheet" href="dashboard.css">
+    <style>
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 10;
+    }
+    .user-info .user-name {
+        font-weight: bold;
+        color: #555;
+    }
+    .user-info .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -58,8 +85,8 @@
                     <span class="breadcrumb">Data Master Ruang Lab, Menampilkan Data Ruang Laboratorium</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
 
@@ -69,7 +96,7 @@
                     <h2><span class="header-icon">🔬</span>Daftar Ruang Lab Praktikum</h2>
                 </div>
                 <div class="lab-actions">
-                    <button class="add-lab-button" id="show-add-form-button">+ Tambah Ruang Laboratorium</button>
+                    <button class="add-lab-button" id="show-add-form-button" <?php if($role!=='admin') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>+ Tambah Ruang Laboratorium</button>
                 </div>
 
                 <div class="data-table">
@@ -93,8 +120,13 @@
                                     echo "<td>" . htmlspecialchars($row["nama_ruang"]) . "</td>";
                                     echo "<td>" . htmlspecialchars($row["lokasi"]) . "</td>";
                                     echo "<td>";
-                                    echo "<button class='action-button edit-button' data-id='" . $row["id"] . "' data-nama='" . htmlspecialchars($row["nama_ruang"]) . "' data-lokasi='" . htmlspecialchars($row["lokasi"]) . "'>📝</button>";
-                                    echo "<button class='action-button delete-button' data-id='" . $row["id"] . "'>🗑️</button>";
+                                    if($role!=='admin') {
+                                        echo "<button class='action-button edit-button' data-id='" . $row["id"] . "' data-nama='" . htmlspecialchars($row["nama_ruang"]) . "' data-lokasi='" . htmlspecialchars($row["lokasi"]) . "' disabled style='opacity:0.6;pointer-events:none;'>📝</button>";
+                                        echo "<button class='action-button delete-button' data-id='" . $row["id"] . "' disabled style='opacity:0.6;pointer-events:none;'>🗑️</button>";
+                                    } else {
+                                        echo "<button class='action-button edit-button' data-id='" . $row["id"] . "' data-nama='" . htmlspecialchars($row["nama_ruang"]) . "' data-lokasi='" . htmlspecialchars($row["lokasi"]) . "'>📝</button>";
+                                        echo "<button class='action-button delete-button' data-id='" . $row["id"] . "'>🗑️</button>";
+                                    }
                                     echo "</td>";
                                     echo "</tr>";
                                 }

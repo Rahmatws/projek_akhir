@@ -3,7 +3,8 @@ require_once 'db_connect.php';
 
 // 1. Ambil ID Jadwal dari URL
 if (!isset($_GET['id_jadwal']) || !is_numeric($_GET['id_jadwal'])) {
-    die("Error: ID Jadwal tidak valid.");
+    header('Location: laporan_absensi.php');
+    exit();
 }
 $id_jadwal = intval($_GET['id_jadwal']);
 

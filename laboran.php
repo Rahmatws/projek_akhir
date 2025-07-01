@@ -1,5 +1,9 @@
 <?php
 require_once 'db_connect.php'; // Sertakan file koneksi database
+session_start();
+$nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : 'User';
+$foto = isset($_SESSION['foto']) && $_SESSION['foto'] ? 'uploads/laboran/' . $_SESSION['foto'] : 'user.png';
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 
 // --- Pagination Logic --- 
 $limit_per_page = isset($_GET['entries']) ? (int)$_GET['entries'] : 10; // Jumlah entri per halaman
@@ -50,6 +54,29 @@ $result = $conn->query($sql);
     <title>Daftar Laboran</title>
     <link rel="stylesheet" href="laboran.css">
     <link rel="stylesheet" href="dashboard.css"> <!-- Untuk sidebar dan general styling -->
+    <style>
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            z-index: 10;
+        }
+        .user-info .user-name {
+            font-weight: bold;
+            color: #555;
+        }
+        .user-info .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -63,7 +90,7 @@ $result = $conn->query($sql);
                 <li><a href="jadwal_praktikum.php"><i class="icon">🗓️</i> Jadwal Praktikum</a></li>
                 <li><a href="kelas.php"><i class="icon">🏫</i> Kelas</a></li>
                 <li><a href="praktikan.php"><i class="icon">✍️</i> Praktikan</a></li>
-                <li><a href="absensi_kehadiran.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
+                <li><a href="laporan_absensi.php"><i class="icon">✅</i> Absensi Kehadiran</a></li>
                 <li><a href="mata_praktikum.php"><i class="icon">📚</i> Mata Praktikum</a></li>
                 <li><a href="asisten_praktikum.php"><i class="icon">🧑‍🏫</i> Asisten Praktikum</a></li>
                 <li><a href="ruang_laboratorium.php"><i class="icon">🔬</i> Ruang Laboratorium</a></li>
@@ -77,8 +104,8 @@ $result = $conn->query($sql);
                     <span class="breadcrumb">Data Master Laboran, Menampilkan data Laboran Laboratorium FTI</span>
                 </div>
                 <div class="user-info">
-                    <span class="user-name">Uchiha Atep</span>
-                    <img src="user.png" alt="User" class="user-avatar">
+                    <span class="user-name"><?php echo htmlspecialchars($nama); ?></span>
+                    <img src="<?php echo htmlspecialchars($foto); ?>" alt="User" class="user-avatar">
                 </div>
             </div>
 
@@ -87,7 +114,7 @@ $result = $conn->query($sql);
                     <h2><span class="header-icon">📄</span> Daftar Laboran</h2>
                 </div>
                 <div class="laboran-actions">
-                    <button class="add-laboran-button" id="show-add-form-button">+ Tambah Laboran</button>
+                    <button class="add-laboran-button" id="show-add-form-button" <?php if($role!=='admin') echo 'disabled style="opacity:0.6;pointer-events:none;"'; ?>>+ Tambah Laboran</button>
                 </div>
 
                 <!-- Area untuk menampilkan pesan status -->
@@ -136,8 +163,13 @@ $result = $conn->query($sql);
                                     // Menggunakan id dari tabel users sebagai data-id
                                     echo "<td>";
                                     echo "<div class=\"action-buttons-wrapper\">"; // Wrapper baru
-                                    echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\" data-username=\"" . htmlspecialchars($row["username"]) . "\">📝</button>";
-                                    echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    if($role!=='admin') {
+                                        echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\" data-username=\"" . htmlspecialchars($row["username"]) . "\" disabled style='opacity:0.6;pointer-events:none;'>📝</button>";
+                                        echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\" disabled style='opacity:0.6;pointer-events:none;'>🗑️</button>";
+                                    } else {
+                                        echo "<button class=\"action-button edit-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\" data-username=\"" . htmlspecialchars($row["username"]) . "\">📝</button>";
+                                        echo "<button class=\"action-button delete-button\" data-id=\"" . htmlspecialchars($row["id"]) . "\">🗑️</button>";
+                                    }
                                     echo "</div>"; // Tutup wrapper
                                     echo "</td>";
                                     echo "</tr>";
@@ -167,7 +199,7 @@ $result = $conn->query($sql);
                     <h2><span class="header-icon">➕</span> Tambah Laboran</h2>
                 </div>
                 <div class="add-laboran-form-content">
-                    <form action="add_laboran.php" method="POST"> <!-- Arahkan ke file proses tambah baru -->
+                    <form action="add_laboran.php" method="POST" enctype="multipart/form-data"> <!-- Arahkan ke file proses tambah baru -->
                         <div class="form-group">
                             <label for="idLaboran">ID Laboran</label>
                             <input type="text" id="idLaboran" name="username" placeholder="ID Petugas (sebagai Username login)" required>
@@ -208,6 +240,10 @@ $result = $conn->query($sql);
                             <label for="noHp">NO HP</label>
                             <input type="text" id="noHp" name="hp" placeholder="No Hp">
                         </div>
+                        <div class="form-group">
+                            <label for="foto">Foto</label>
+                            <input type="file" id="foto" name="foto" accept="image/*">
+                        </div>
                         <div class="button-group">
                             <button type="reset" class="reset-button">♻️ Reset</button>
                             <button type="submit" class="save-button">💾 Simpan</button>
@@ -224,7 +260,7 @@ $result = $conn->query($sql);
                     <h2><span class="header-icon">📝</span> Edit Laboran</h2>
                 </div>
                 <div class="edit-laboran-form-content">
-                    <form action="update_laboran.php" method="POST"> <!-- Arahkan ke file proses update baru -->
+                    <form action="update_laboran.php" method="POST" enctype="multipart/form-data"> <!-- Arahkan ke file proses update baru -->
                         <input type="hidden" id="editIdUser" name="id"> <!-- Menyimpan ID user dari tabel users -->
                         <div class="form-group">
                             <label for="editIdLaboran">ID Laboran</label>
@@ -269,7 +305,11 @@ $result = $conn->query($sql);
                         <div class="form-group">
                             <label>Foto</label>
                             <div class="photo-upload-group">
-                                <img src="user.png" alt="Foto Laboran" class="laboran-photo" id="editLaboranPhoto">
+                                <?php if (!empty($edit_foto)) { ?>
+                                    <img src="uploads/laboran/<?php echo htmlspecialchars($edit_foto); ?>" alt="Foto Laboran" class="laboran-photo" id="editLaboranPhoto">
+                                <?php } else { ?>
+                                    <img src="user.png" alt="Foto Laboran" class="laboran-photo" id="editLaboranPhoto">
+                                <?php } ?>
                                 <input type="file" id="editFoto" name="editFoto" accept="image/*">
                             </div>
                         </div>
